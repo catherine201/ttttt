@@ -34,6 +34,8 @@ const router = new Router({
       children: [
         { path: '/', component: page('demo') },
         { path: '/demo', component: page('demo') },
+        { path: '/baidu', component: page('iframe') },
+        { path: '/aliyun', component: page('iframe') },
         {
           path: '/game',
           name: 'game-view',
@@ -72,6 +74,11 @@ const router = new Router({
           name: 'safetyCheck',
           component: page('personalCenter/safetyCheck')
         }, // 安全验证
+        {
+          path: '/console',
+          name: 'console',
+          component: page('personalCenter/console')
+        }, // 控制台
         { name: 404, component: page('404') }
       ]
     },

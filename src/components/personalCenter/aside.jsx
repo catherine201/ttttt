@@ -46,6 +46,11 @@ export default class Asider extends React.Component {
         key: 'safetyCheck',
         path: '/personalCenter/safetyCheck',
         text: '安全验证'
+      },
+      {
+        key: 'console',
+        path: '/personalCenter/console',
+        text: '控制台'
       }
     ]
   };

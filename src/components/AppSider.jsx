@@ -57,15 +57,13 @@ export default class AppSider extends React.Component {
         key: 'components',
         text: 'Components',
         icon: 'appstore-o',
-        submenu: [
-          { key: 'm-button', path: '/admin/components/button', text: 'MButton' }
-        ]
+        submenu: [{ key: 'm-button', path: '/admin/baidu', text: 'baidu' }]
       },
       {
         key: 'users',
         text: 'Users',
         icon: 'contacts',
-        submenu: [{ key: 'user', path: '/admin/user', text: 'user' }]
+        submenu: [{ key: 'user', path: '/admin/aliyun', text: 'aliyun' }]
       },
       {
         key: 'pages',

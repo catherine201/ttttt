@@ -68,8 +68,15 @@ export default class AppHeader extends React.Component {
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           安全验证
         </Menu.Item>
+        <Menu.Item
+          key="4"
+          onClick={() => this.toHref('/personalCenter/console')}
+        >
+          <Icon type="check-circle" style={{ marginRight: '5px' }} />
+          控制台
+        </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="4" onClick={() => this.doLogout()}>
+        <Menu.Item key="5" onClick={() => this.doLogout()}>
           <Icon type="logout" style={{ marginRight: '5px' }} />
           退出
         </Menu.Item>
