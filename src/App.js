@@ -12,8 +12,6 @@ import { Provider } from 'react-redux';
 import { message, Modal, notification } from 'antd';
 // import { routes } from './routes';
 import store from './store';
-// import styles from './test.less';
-import './test.less';
 import router from './routes';
 
 React.Component.prototype.$msg = message;

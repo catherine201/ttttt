@@ -263,26 +263,43 @@ function buildDraggableArea({
         if (isMobile) this.container.style.overflowY = 'auto';
 
         window.dragMouseDown = false;
-
-        document.removeEventListener('mouseup', closeDragElement, false);
-        document.removeEventListener('mousemove', elementDrag, false);
-        elmnt.firstChild.removeEventListener(
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
           'mouseup',
           closeDragElement,
           false
         );
-        elmnt.firstChild.removeEventListener('mousemove', elementDrag, false);
-        // elmnt.firstChild.removeEventListener(
-        //   'touchend',
-        //   closeDragElement,
-        //   false
-        // );
-        // elmnt.firstChild.removeEventListener(
-        //   'touchcancel',
-        //   closeDragElement,
-        //   false
-        // );
-        // elmnt.firstChild.removeEventListener('touchmove', elementDrag, false);
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'mousemove',
+          elementDrag,
+          false
+        );
+        document.removeEventListener('mouseup', closeDragElement, false);
+        document.removeEventListener('mousemove', elementDrag, false);
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'mouseup',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'mousemove',
+          elementDrag,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'touchend',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'touchcancel',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.removeEventListener(
+          'touchmove',
+          elementDrag,
+          false
+        );
 
         if (window.parentDragTag) window.parentDragTag.style.zIndex = 1;
 
@@ -319,6 +336,7 @@ function buildDraggableArea({
       };
 
       const dragStart = e => {
+        console.log('变化了');
         // e.preventDefault();
         this.tagChanged = false;
 
@@ -340,23 +358,47 @@ function buildDraggableArea({
         if (window.parentDragTag) window.parentDragTag.style.zIndex = 2;
         document.addEventListener('mouseup', closeDragElement, false);
         document.addEventListener('mousemove', elementDrag, false);
-        elmnt.firstChild.addEventListener('mouseup', closeDragElement, false);
-        elmnt.firstChild.addEventListener('mousemove', elementDrag, false);
-        // elmnt.firstChild.addEventListener('touchend', closeDragElement, false);
-        // elmnt.firstChild.addEventListener(
-        //   'touchcancel',
-        //   closeDragElement,
-        //   false
-        // );
-        // elmnt.firstChild.addEventListener('touchmove', elementDrag, false);
+        elmnt.firstElementChild.firstElementChild.addEventListener(
+          'mouseup',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.addEventListener(
+          'mousemove',
+          elementDrag,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.addEventListener(
+          'touchend',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.addEventListener(
+          'touchcancel',
+          closeDragElement,
+          false
+        );
+        elmnt.firstElementChild.firstElementChild.addEventListener(
+          'touchmove',
+          elementDrag,
+          false
+        );
 
         this.positions.forEach((p, i) => {
           if (p.id === id) index = i;
         });
       };
-      console.dir(elmnt.firstChild);
-      elmnt.firstChild.addEventListener('mousedown', dragStart, true);
-      //   elmnt.firstChild.addEventListener('touchstart', dragStart, true);
+      //   console.dir(elmnt.firstChild);
+      elmnt.firstElementChild.firstElementChild.addEventListener(
+        'mousedown',
+        dragStart,
+        false
+      );
+      elmnt.firstElementChild.firstElementChild.addEventListener(
+        'touchstart',
+        dragStart,
+        false
+      );
     }
 
     addTag(tag) {

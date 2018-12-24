@@ -80,7 +80,7 @@ export default class Console extends React.Component {
               // console.log(this.state.consoleArr);
               // console.log(tag);
               <div className={styles.row}>
-                <div className={styles.rowTop} ref="drag">
+                <div className={`drag ${styles.rowTop}`} ref="drag">
                   <p className={styles.address}>地址: {tag.address}</p>
                   <Button
                     type="primary"

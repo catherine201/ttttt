@@ -7,9 +7,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
-import '../../test.less';
-// import router from '../../routes';
-// import Test from './test';
 
 class Game extends Component {
   static propTypes = {

@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 // import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
-// import styles from '../../test.less';
-import '../../test.less';
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_570381_jsx2qmhaxtg.js'
