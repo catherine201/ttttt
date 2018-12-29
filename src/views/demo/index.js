@@ -2,21 +2,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+// import { Icon } from 'antd';
 
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_570381_jsx2qmhaxtg.js'
-});
+// const IconFont = Icon.createFromIconfontCN({
+//   scriptUrl: '//at.alicdn.com/t/font_570381_jsx2qmhaxtg.js'
+// });
 /* eslint-disable */
 function Test(props) {
   const { test } = props;
   return (
     <div>
-      <IconFont type="icon-icon15" />
+      <h2>{JSON.parse(window.sessionStorage.getItem('user')).username}</h2>
+      {/* <IconFont type="icon-icon15" /> */}
       <p>欢迎您</p>
-      <Icon type="loading" />
-      <i className="iconfont hd-icon-index-delete"></i>
-      <p>{test}</p>
+      {/* <Icon type="loading" /> */}
+      {/* <i className="iconfont hd-icon-index-delete"></i> */}
+      {/* <p>{test}</p> */}
     </div>
   );
 }

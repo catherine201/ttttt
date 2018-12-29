@@ -30,7 +30,9 @@ body{
   background: #ECF0F5;
   box-sizing: border-box;
 }
-
+html body .christmas.ant-btn-primary:before{
+  display: none;
+}
 /* 头部进步条的样式 */
 #nprogress .bar {
   background: #812CB2 ;
@@ -41,6 +43,12 @@ body{
   border-left-color: #812CB2 ;
 }
 /* 全局样式 */
+/* flex */
+  .flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .f-left{
     float: left;
   }
@@ -49,6 +57,9 @@ body{
   }
   .text-center{
     text-align: center;
+  }
+  .text-right{
+    text-align: right;
   }
   .blur-0{
     filter: blur(0px);

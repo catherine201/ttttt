@@ -10,6 +10,8 @@ export default class AppHeader extends React.Component {
     fullscreen: false
   };
 
+  componentDidMount() {}
+
   toHref = addr => {
     console.log(this);
     this.props.history.push(addr);
@@ -27,7 +29,6 @@ export default class AppHeader extends React.Component {
   }
 
   doLogout() {
-    console.log(this);
     this.$modal.confirm({
       title: '你确定退出么？',
       content: '',
@@ -75,8 +76,16 @@ export default class AppHeader extends React.Component {
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           控制台
         </Menu.Item>
+        <Menu.Item key="5" onClick={() => this.toHref('/personalCenter/group')}>
+          <Icon type="check-circle" style={{ marginRight: '5px' }} />
+          分组管理
+        </Menu.Item>
+        <Menu.Item key="6" onClick={() => this.toHref('/personalCenter/menu')}>
+          <Icon type="check-circle" style={{ marginRight: '5px' }} />
+          菜单管理
+        </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="5" onClick={() => this.doLogout()}>
+        <Menu.Item key="7" onClick={() => this.doLogout()}>
           <Icon type="logout" style={{ marginRight: '5px' }} />
           退出
         </Menu.Item>
@@ -135,7 +144,7 @@ export default class AppHeader extends React.Component {
                     alt="user"
                     className="user-avator"
                   />
-                  Administrator
+                  {JSON.parse(window.sessionStorage.getItem('user')).username}
                   <Icon type="down" />
                 </a>
               </Dropdown>
@@ -164,7 +173,7 @@ export default class AppHeader extends React.Component {
         <div>
           <Menu theme="dark" mode="horizontal">
             <Menu.Item key="1">
-              <Link to="/">Home</Link>
+              <Link to="/admin">Home</Link>
             </Menu.Item>
             {/* <Menu.Item key="8">
               <a

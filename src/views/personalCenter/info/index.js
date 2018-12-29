@@ -29,8 +29,8 @@ export default class Info extends React.Component {
     this.state = {
       // loading: false,
       nickName: '冰琉璃2050',
-      imageUrl:
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+      imageUrl: ''
+      // 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
       // srcImg: null
     };
   }

@@ -5,6 +5,7 @@ import Router from 'react-concise-router';
 // import Login from '../views/login';
 // import Demo from '../views/demo';
 // import NotMatch from '../views/404';
+// import NProgress from 'NProgress';
 import AppLayout from '../components/AppLayout';
 import store from '../store';
 // const Home = () => import('../views/home');
@@ -79,6 +80,16 @@ const router = new Router({
           name: 'console',
           component: page('personalCenter/console')
         }, // 控制台
+        {
+          path: '/group',
+          name: 'group',
+          component: page('personalCenter/groupMsg')
+        }, // 分组管理
+        {
+          path: '/menu',
+          name: 'menu',
+          component: page('personalCenter/menuMsg')
+        }, // 菜单管理
         { name: 404, component: page('404') }
       ]
     },
@@ -96,12 +107,12 @@ const router = new Router({
 router.beforeEach = function(ctx, next) {
   console.log(ctx);
   console.log('luyoubianh ');
-  NProgress.start();
+  // NProgress.start();
   store.dispatch.demo.setCountLoading([]);
   next();
   // next();
   setTimeout(() => {
-    NProgress.done();
+    // NProgress.done();
   }, 300);
 };
 export default router;

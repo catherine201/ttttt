@@ -4,7 +4,7 @@ import { serverIpAddress } from './server_config';
 import loadingImg from '../assets/images/loading.gif';
 import store from '../store/index';
 
-axios.defaults.baseURL = serverIpAddress;
+// axios.defaults.baseURL = serverIpAddress;
 axios.defaults.timeout = 60000;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 // 请求前统一添加token
@@ -118,12 +118,9 @@ function fetchApi(param, options) {
           switch (response.data.code) {
             case 0:
               message.success(response.data.msg);
-              // if (response.data.msg === '查询成功') {
-              //   message.success(response.data.msg);
-              // }
               return resolve(response.data);
             default:
-              message.error(response.data.msg);
+              // message.error(response.data.msg);
               return resolve(response.data);
           }
         } else {
@@ -165,6 +162,7 @@ function fetchApi(param, options) {
           if (options.showLoading) {
             // loadingNum--;
             if (!store.getState().demo.countLoadingArr.length) {
+              // console.log(errorMsg);
               message.error(errorMsg);
               loading.end();
               return;
@@ -188,7 +186,8 @@ export function get(url, data, options) {
   const param = {
     method: 'GET',
     url,
-    params: data
+    params: data,
+    baseURL: options.baseUrl || serverIpAddress
   };
   return fetchApi(param, options);
 }
@@ -197,7 +196,8 @@ export function post(url, data, options) {
   const param = {
     method: 'POST',
     url,
-    data
+    data,
+    baseURL: options.baseUrl || serverIpAddress
   };
   return fetchApi(param, options);
 }
@@ -209,7 +209,8 @@ export function postUploadFile(url, data, options) {
     data,
     headers: {
       'Content-Type': 'multipart/form-data'
-    }
+    },
+    baseURL: options.baseUrl || serverIpAddress
   };
   return fetchApi(param, options);
 }
@@ -218,7 +219,8 @@ export function del(url, data, options) {
   const param = {
     method: 'DELETE',
     url,
-    params: data
+    params: data,
+    baseURL: options.baseUrl || serverIpAddress
   };
   return fetchApi(param, options);
 }
@@ -227,7 +229,8 @@ export function put(url, data, options) {
   const param = {
     method: 'PUT',
     url,
-    data
+    data,
+    baseURL: options.baseUrl || serverIpAddress
   };
   return fetchApi(param, options);
 }

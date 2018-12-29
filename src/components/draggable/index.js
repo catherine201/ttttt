@@ -144,12 +144,12 @@ function buildDraggableArea({
               )
                 isHead = true;
 
-              if (
-                // Tail of tag list
-                i === this.positions.length - 2 &&
-                ((ctop > p2.top && cleft > p2.left - 8) || ctop > p2.bottom)
-              )
-                isTail = true;
+              //   if (
+              //     // Tail of tag list
+              //     i === this.positions.length - 2 &&
+              //     ((ctop > p2.top && cleft > p2.left - 8) || ctop > p2.bottom)
+              //   )
+              //     isTail = true;
 
               if (
                 // Between two tags

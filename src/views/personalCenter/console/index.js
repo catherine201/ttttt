@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Button, Input } from 'antd';
+import { Divider, Button, Input, Icon } from 'antd';
 // import PropTypes from 'prop-types';
 import { DraggableArea } from '../../../components/draggable';
 import styles from './index.less';
@@ -15,25 +15,28 @@ export default class Console extends React.Component {
       consoleArr: [
         {
           id: 1,
-          address: 'https://control1.abc.com',
-          name: 'ABC控制台',
-          userGroup: ['客服组'],
+          address: '客服组',
+          name: '客服组',
+          authorGroup: ['https://zos.alipayobjects'],
           user: ['老刘', '老王'],
           foldFlag: false
         },
         {
           id: 2,
-          address: 'https://control2.abc.com',
-          name: 'ABC控制台',
-          userGroup: ['客服组', '技术组'],
+          address: '技术组',
+          name: '客服组',
+          authorGroup: [
+            'https://zos.alipayobjects',
+            'https://zos.alipayobjects'
+          ],
           user: ['老刘', '老王'],
           foldFlag: false
         },
         {
           id: 3,
-          address: 'https://control3.abc.com',
-          name: 'ABC控制台',
-          userGroup: ['客服组'],
+          address: '人事组',
+          name: '人事组',
+          authorGroup: ['https://zos.alipayobjects'],
           user: ['老刘', '老王'],
           foldFlag: false
         }
@@ -41,7 +44,20 @@ export default class Console extends React.Component {
     };
   }
 
-  onChangeNickName() {}
+  onChangeNickName = (id, e) => {
+    // this.setState({ nickName: e.target.value });
+    console.log(id, e);
+    // tag.name = e.target.value;
+    const consoleArr = this.state.consoleArr.slice();
+    consoleArr.some((item, index) => {
+      if (item.id === id) {
+        consoleArr[index].name = e.target.value;
+      }
+    });
+    this.setState({
+      consoleArr
+    });
+  };
 
   unFoldClick(id) {
     const consoleArr = this.state.consoleArr.slice();
@@ -81,17 +97,20 @@ export default class Console extends React.Component {
               // console.log(tag);
               <div className={styles.row}>
                 <div className={`drag ${styles.rowTop}`} ref="drag">
-                  <p className={styles.address}>地址: {tag.address}</p>
-                  <Button
-                    type="primary"
-                    className={styles.fold_btn}
-                    size="large"
-                    onClick={() => {
-                      this.unFoldClick(tag.id);
-                    }}
-                  >
-                    展开
-                  </Button>
+                  <p className={styles.address}>分组: {tag.address}</p>
+                  <div>
+                    <Button
+                      type="primary"
+                      className={styles.fold_btn}
+                      size="large"
+                      onClick={() => {
+                        this.unFoldClick(tag.id);
+                      }}
+                    >
+                      展开
+                    </Button>
+                    <Icon type="delete" className={styles.deleteIcon} />
+                  </div>
                 </div>
                 {/* {tag.foldFlag} tag.foldFlag && */}
                 {tag.foldFlag && (
@@ -101,7 +120,7 @@ export default class Console extends React.Component {
                         <span>名字:</span>
                         <Input
                           value={tag.name}
-                          onChange={this.onChangeNickName}
+                          onChange={e => this.onChangeNickName(tag.id, e)}
                           className={styles.foldName_input}
                           onMouseDown={() => false}
                           onMouseUp={() => false}
@@ -116,9 +135,9 @@ export default class Console extends React.Component {
                     </div>
                     <div className={styles.foldName}>
                       <div className={styles.name}>
-                        <p>用户组:</p>
+                        <p>权限:</p>
                         <ul>
-                          {tag.userGroup.map((item, index) => (
+                          {tag.authorGroup.map((item, index) => (
                             <li key={index} className={styles.userLi}>
                               {item}
                             </li>

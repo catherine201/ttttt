@@ -2,47 +2,10 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
-const logoImg = require('../assets/images/logo.png');
+const logoImg = require('../../assets/images/logo.png');
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
-
-function generateMenu(menus) {
-  let items = [];
-  items = menus.map(menu => {
-    if (Array.isArray(menu.submenu)) {
-      return (
-        <SubMenu
-          key={menu.key}
-          title={
-            <div>
-              <Icon type={menu.icon} />
-              <span>{menu.text}</span>
-            </div>
-          }
-        >
-          {generateMenu(menu.submenu, true)}
-        </SubMenu>
-      );
-    }
-    return (
-      <Menu.Item key={menu.key}>
-        {menu.type === 'a' ? (
-          <a href={menu.path}>
-            {menu.icon ? <Icon type={menu.icon} /> : ''}
-            <span className="nav-text">{menu.text}</span>
-          </a>
-        ) : (
-          <Link to={menu.path}>
-            {menu.icon ? <Icon type={menu.icon} /> : ''}
-            <span className="nav-text">{menu.text}</span>
-          </Link>
-        )}
-      </Menu.Item>
-    );
-  });
-  return items;
-}
 
 export default class AppSider extends React.Component {
   state = {
@@ -50,39 +13,88 @@ export default class AppSider extends React.Component {
       {
         key: 'dashboard',
         path: '/admin',
-        text: 'Dashboard',
+        text: '产品与服务',
         icon: 'cloud'
       },
       {
-        key: 'components',
-        text: 'Components',
-        icon: 'appstore-o',
-        submenu: [{ key: 'm-button', path: '/admin/baidu', text: 'baidu' }]
+        key: 'baidu',
+        path: '/admin/baidu',
+        text: 'baidu',
+        icon: 'cloud'
       },
       {
-        key: 'users',
-        text: 'Users',
-        icon: 'contacts',
-        submenu: [{ key: 'user', path: '/admin/aliyun', text: 'aliyun' }]
-      },
-      {
-        key: 'pages',
-        text: 'Pages',
-        icon: 'eye-o',
-        submenu: [
-          { key: 'g-404', path: '/404', text: '全局404' },
-          { key: '404', path: '/admin/404', text: '404' },
-          { key: 'redux-demo', path: '/admin/redux-demo', text: 'redux-demo' },
-          { key: 'model-demo', path: '/admin/model', text: 'model-demo' }
-        ]
-      },
-      {
-        key: 'setting',
-        text: 'Setting',
-        icon: 'setting',
-        submenu: [{ key: 'test', text: 'Test', path: '/' }]
+        key: 'aliyun',
+        path: '/admin/aliyun',
+        text: 'aliyun',
+        icon: 'cloud'
       }
+      // {
+      //   key: 'components',
+      //   text: 'Components',
+      //   icon: 'appstore-o',
+      //   submenu: [{ key: 'm-button', path: '/admin/baidu', text: 'baidu' }]
+      // },
+      // {
+      //   key: 'users',
+      //   text: 'Users',
+      //   icon: 'contacts',
+      //   submenu: [{ key: 'user', path: '/admin/aliyun', text: 'aliyun' }]
+      // },
+      // {
+      //   key: 'pages',
+      //   text: 'Pages',
+      //   icon: 'eye-o',
+      //   submenu: [
+      //     { key: 'g-404', path: '/404', text: '全局404' },
+      //     { key: '404', path: '/admin/404', text: '404' },
+      //     { key: 'redux-demo', path: '/admin/redux-demo', text: 'redux-demo' },
+      //     { key: 'model-demo', path: '/admin/model', text: 'model-demo' }
+      //   ]
+      // },
+      // {
+      //   key: 'setting',
+      //   text: 'Setting',
+      //   icon: 'setting',
+      //   submenu: [{ key: 'test', text: 'Test', path: '/' }]
+      // }
     ]
+  };
+
+  generateMenu = function(menus) {
+    let items = [];
+    items = menus.map(menu => {
+      if (Array.isArray(menu.submenu)) {
+        return (
+          <SubMenu
+            key={menu.key}
+            title={
+              <div>
+                <Icon type={menu.icon} />
+                <span>{menu.text}</span>
+              </div>
+            }
+          >
+            {generateMenu(menu.submenu, true)}
+          </SubMenu>
+        );
+      }
+      return (
+        <Menu.Item key={menu.key}>
+          {menu.type === 'a' ? (
+            <a href={menu.path}>
+              {menu.icon ? <Icon type={menu.icon} /> : ''}
+              <span className="nav-text">{menu.text}</span>
+            </a>
+          ) : (
+            <Link to={menu.path}>
+              {menu.icon ? <Icon type={menu.icon} /> : ''}
+              <span className="nav-text">{menu.text}</span>
+            </Link>
+          )}
+        </Menu.Item>
+      );
+    });
+    return items;
   };
 
   render() {
@@ -92,9 +104,10 @@ export default class AppSider extends React.Component {
           <img className="logo" src={logoImg} alt="logo" />
           <span className="title">Euen PlatForm </span>
         </div>
-        <Menu theme="dark" mode="inline">
-          {generateMenu(this.state.menu)}
-          {/* <SubMenu key="sub1" title={<div><Icon type="dashboard" /><span>Dashboard</span></div>}>
+        <div className="menu_wrap">
+          <Menu theme="dark" mode="inline">
+            {this.generateMenu(this.state.menu)}
+            {/* <SubMenu key="sub1" title={<div><Icon type="dashboard" /><span>Dashboard</span></div>}>
             <Menu.Item key="1"><Link to="/admin" >Wellcome</Link></Menu.Item>
             <Menu.Item key="2">option2</Menu.Item>
             <Menu.Item key="3">option3</Menu.Item>
@@ -132,7 +145,8 @@ export default class AppSider extends React.Component {
           <Menu.Item>
             <Link to="/admin/redux-demo" ><Icon type="ant-design" /><span>redux-demo</span></Link>
           </Menu.Item> */}
-        </Menu>
+          </Menu>
+        </div>
       </Sider>
     );
   }

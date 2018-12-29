@@ -6,7 +6,7 @@ import styles from './aside.less';
 function generateMenu(props, menus) {
   let items = [];
   const arr = props.location.pathname.split('/');
-  console.log(arr[arr.length - 1]);
+  // console.log(arr[arr.length - 1]);
   items = menus.map(menu => (
     <Menu.Item
       key={menu.key}
@@ -51,6 +51,16 @@ export default class Asider extends React.Component {
         key: 'console',
         path: '/personalCenter/console',
         text: '控制台'
+      },
+      {
+        key: 'group',
+        path: '/personalCenter/group',
+        text: '分组管理'
+      },
+      {
+        key: 'menu',
+        path: '/personalCenter/menu',
+        text: '菜单管理'
       }
     ]
   };
@@ -60,7 +70,7 @@ export default class Asider extends React.Component {
     return (
       <div
         className={`personalSide ${
-          this.props.isShow
+          this.props.isShow && document.body.clientWidth > 450
             ? `slideInLeft ${styles.personalShow}`
             : `slideInRight ${styles.personalHide}`
         }`}

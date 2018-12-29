@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Form, Input, Icon, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import styles from './login.less';
+import createApi from '../../api/registerAndLogin';
 
 const srcImg = require('../../assets/images/logo.png');
 
@@ -12,9 +13,9 @@ class Login extends React.Component {
   };
 
   state = {
-    username: 'Administrator',
-    password: '123456',
-    isLoding: false
+    username: '',
+    password: ''
+    // isLoding: false
   };
 
   componentDidMount() {
@@ -24,23 +25,58 @@ class Login extends React.Component {
     });
   }
 
+  login = async obj => {
+    const res = await createApi.login(obj);
+    if (res) {
+      // this.setState({
+      //   isLoding: false
+      // });
+      // sessionStorage.setItem('user', JSON.stringify(res.data));
+      console.log(res);
+      const info = {
+        access_token: res.data.access_token,
+        open_id: res.data.openid
+      };
+      const result = await createApi.secondLogin(info);
+      if (result) {
+        this.$msg.success('登陆成功');
+        setTimeout(() => {
+          this.props.history.push('/admin');
+        }, 500);
+      } else {
+        this.$msg.error('登陆失败');
+      }
+      // sessionStorage.setItem('user', JSON.stringify(res));
+    } else {
+      // this.setState({
+      //   isLoding: false
+      // });
+      this.$msg.error('授权失败');
+    }
+  };
+
   onSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         sessionStorage.setItem('user', JSON.stringify(values));
-        this.setState({
-          isLoding: true
-        });
-        this.$msg.loading('正在登陆...', 2, () => {
-          this.setState({
-            isLoding: false
-          });
-          this.$msg.success('登陆成功');
-          setTimeout(() => {
-            this.props.history.push('/admin');
-          }, 500);
-        });
+        // this.setState({
+        //   isLoding: true
+        // });
+        const obj = {
+          name: values.username,
+          password: values.password
+        };
+        this.login(obj);
+        // this.$msg.loading('正在登陆...', 2, () => {
+        //   this.setState({
+        //     isLoding: false
+        //   });
+        //   this.$msg.success('登陆成功');
+        //   setTimeout(() => {
+        //     this.props.history.push('/admin');
+        //   }, 500);
+        // });
       }
     });
   };
@@ -123,7 +159,6 @@ class Login extends React.Component {
               >
                 Log in
               </Button>
-              Or
               <a href="#" onClick={this.toRegister}>
                 没有账号？点击注册
               </a>
