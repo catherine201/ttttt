@@ -50,14 +50,19 @@ export const getValueByPath = (data, paths) => {
 // id to name
 export function idToName(arr, menuArr) {
   console.log(store);
+  console.log(arr);
   let str = '';
   arr.forEach((element, index) => {
-    console.log(menuArr);
     const ind = menuArr.findIndex(item => item._id === element);
     if (ind !== -1) {
+      console.log(index, menuArr[ind].name);
       str += index ? `,${menuArr[ind].name}` : `${menuArr[ind].name}`;
     }
   });
+  console.log(str);
+  if (str.startsWith(',')) {
+    str = str.substring(1);
+  }
   return str;
 }
 
