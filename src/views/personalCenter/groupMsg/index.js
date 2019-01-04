@@ -58,6 +58,8 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
+      this.props.getInitGroup();
+      this.props.getGroup();
     }
   };
 
@@ -533,7 +535,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getMenu: dispatch.menu.getMenu,
-  getInitGroup: dispatch.query.getInitGroup
+  getInitGroup: dispatch.query.getInitGroup,
+  getGroup: dispatch.menu.getGroup
 });
 export default connect(
   mapStateToProps,

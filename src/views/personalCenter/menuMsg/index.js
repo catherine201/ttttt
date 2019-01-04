@@ -53,6 +53,9 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
       // console.log(pagination.total);
     }
   };
@@ -487,7 +490,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitMenu: dispatch.query.getInitMenu
+  getInitMenu: dispatch.query.getInitMenu,
+  getMenu: dispatch.menu.getMenu,
+  getOwnMenu: dispatch.menu.getOwnMenu
 });
 export default connect(
   mapStateToProps,

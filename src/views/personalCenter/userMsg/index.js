@@ -62,6 +62,7 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
+      this.props.getInitUser();
       console.log(this.state.data);
     }
   };
@@ -195,20 +196,26 @@ class Console extends React.Component {
 
   handleCancel = () => {
     // 修改权限那里如果取消就拿回原来的值
+    console.log(this.state.originalSendData);
     this.setState({
       data: this.state.originalSendData,
       showModal: 0
     });
   };
 
-  handleEdit = (val, data, id) => {
-    console.log(id);
-    this.setState({
-      originalSendData: JSON.parse(JSON.stringify(this.state.data)),
-      editSendData: data,
-      showModal: val,
-      editId: id
-    });
+  handleEdit = (val, data, id, text) => {
+    if (text._id !== '') {
+      this.setState({
+        originalSendData: JSON.parse(
+          JSON.stringify(
+            this.state.data.length ? this.state.data : this.props.initUser.datas
+          )
+        ),
+        editSendData: data,
+        showModal: val,
+        editId: id
+      });
+    }
   };
 
   searchUserInfo = () => {};
@@ -264,7 +271,7 @@ class Console extends React.Component {
               className={`${styles.Icon}`}
               type="form"
               onClick={() => {
-                this.handleEdit(3, text.team_ids, text._id);
+                this.handleEdit(3, text.team_ids, text._id, text);
               }}
             />
           </span>
