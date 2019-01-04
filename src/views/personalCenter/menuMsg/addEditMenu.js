@@ -26,6 +26,17 @@ class AddEditMenu extends React.Component {
     );
   }
 
+  validateUrl = (rule, value, callback) => {
+    const reg = /^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/i; // 密码至少为8位的字母,数字,字符任意两种的组合
+    if (value && reg.test(value)) {
+      callback();
+    } else if (value && !reg.test(value)) {
+      callback('输入地址不符合规则!');
+    } else {
+      callback('请输入地址');
+    }
+  };
+
   render() {
     // const { data } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -80,8 +91,11 @@ class AddEditMenu extends React.Component {
               <Form.Item label="跳转地址" {...formItemLayout}>
                 {getFieldDecorator('target', {
                   rules: [
-                    { required: true, message: '请输入跳转地址!' },
-                    { max: 128, message: '最多128位!' }
+                    // { required: true, message: '请输入跳转地址!' },
+                    { max: 128, message: '最多128位!' },
+                    {
+                      validator: this.validateUrl
+                    }
                   ]
                 })(<Input placeholder="请输入跳转地址" />)}
               </Form.Item>
@@ -91,7 +105,12 @@ class AddEditMenu extends React.Component {
             <Col span={12}>
               <Form.Item label="图标地址" {...formItemLayout}>
                 {getFieldDecorator('icon_url', {
-                  rules: [{ max: 128, message: '最多128位!' }]
+                  rules: [
+                    { max: 128, message: '最多128位!' },
+                    {
+                      validator: this.validateUrl
+                    }
+                  ]
                 })(<Input placeholder="请输入图标地址" />)}
               </Form.Item>
             </Col>

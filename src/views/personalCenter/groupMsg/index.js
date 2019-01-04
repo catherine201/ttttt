@@ -85,15 +85,15 @@ class Console extends React.Component {
     }
   };
 
-  handleSearch = (selectedKeys, confirm) => {
-    confirm();
-    this.setState({ searchText: selectedKeys[0] });
-  };
+  // handleSearch = (selectedKeys, confirm) => {
+  //   confirm();
+  //   this.setState({ searchText: selectedKeys[0] });
+  // };
 
-  handleReset = clearFilters => {
-    clearFilters();
-    this.setState({ searchText: '' });
-  };
+  // handleReset = clearFilters => {
+  //   clearFilters();
+  //   this.setState({ searchText: '' });
+  // };
 
   handleTableChange = pagination => {
     const pager = { ...this.state.pagination };
