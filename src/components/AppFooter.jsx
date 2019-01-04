@@ -13,7 +13,7 @@ export default class AppFooter extends React.Component {
         <Icon type="cloud" />
         Make by &nbsp;
         <span>
-          <Tag color="blue">Euen</Tag>
+          <Tag color="blue">Leeker Labs</Tag>
         </span>
       </div>
     );

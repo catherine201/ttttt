@@ -1,10 +1,13 @@
 import React from 'react';
 import { Table, Input, Button, Icon, Divider, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
+import { connect } from 'react-redux';
 import AddEditMenu from './addEditMenu';
 import styles from './index.less';
+import createApi from '../../../api/menuMsg';
+import { handleObj } from '../../../utils';
 
-export default class Console extends React.Component {
+class Console extends React.Component {
   static propTypes = {};
 
   constructor(props) {
@@ -13,57 +16,89 @@ export default class Console extends React.Component {
       searchText: '', // table里面的search
       menuNameInput: '', // 头部的查询
       menuAddrInput: '',
-      pagination: {},
+      pagination: {
+        defaultCurrent: 1,
+        defaultPageSize: 6
+      },
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增菜单  2 表示显示 编辑菜单
-      data: [
-        {
-          key: '1',
-          name: '控制台1',
-          remark: '客服',
-          sort: 0,
-          target: 'http://baidu.com',
-          icon_url: 'http://aliyun.com',
-          parent_id: '555'
-        },
-        {
-          key: '2',
-          name: '控制台2',
-          remark: '客服',
-          sort: 0,
-          target: 'http://baidu.com',
-          icon_url: 'http://aliyun.com',
-          parent_id: '555'
-        },
-        {
-          key: '3',
-          name: '控制台3',
-          remark: '客服',
-          sort: 0,
-          target: 'http://baidu.com',
-          icon_url: 'http://aliyun.com',
-          parent_id: '555'
-        },
-        {
-          key: '4',
-          name: '控制台4',
-          remark: '客服',
-          sort: 0,
-          target: 'http://baidu.com',
-          icon_url: 'http://aliyun.com',
-          parent_id: '555'
-        }
-      ],
-      sendData: {} // 发送给新增编辑组件的值
+      data: [],
+      sendData: {}, // 发送给新增编辑组件的值
+      limit: 6 // 一页多少个项
     };
   }
 
   componentDidMount() {
-    const pagination = { ...this.state.pagination };
-    pagination.total = 20;
-    this.setState({
-      pagination
-    });
+    !this.props.initMenus.datas ? this.props.getInitMenu() : false;
+    // const pagination = { ...this.state.pagination };
+    // pagination.total = 20;
+    // this.setState({
+    //   pagination
+    // });
+    // const obj = {
+    //   limit: this.state.limit,
+    //   offset: 0
+    // };
+    // this.queryMenus(obj);
   }
+
+  queryMenus = async obj => {
+    const res = await createApi.queryMenus(obj);
+    if (res) {
+      // console.log(res);
+      const pagination = { ...this.state.pagination };
+      // pagination.total = res.paging.total;
+      // console.log(res.paging.total);
+      pagination.total = res.paging.total;
+      this.setState({
+        pagination,
+        data: res.datas
+      });
+      // console.log(pagination.total);
+    }
+  };
+
+  addMenu = async obj => {
+    const res = await createApi.addMenu(handleObj(obj));
+    if (res) {
+      // console.log(res);
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryMenus(obj);
+    }
+  };
+
+  reviseMenu = async obj => {
+    const res = await createApi.reviseMenu(handleObj(obj));
+    if (res) {
+      // console.log(res);
+      // console.log(this.state.pagination.current);
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryMenus(obj);
+    }
+  };
+
+  deleteMenu = async obj => {
+    const res = await createApi.deleteMenu(obj);
+    if (res) {
+      // console.log(res);
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryMenus(obj);
+    }
+  };
 
   moDalTitle = () => {
     switch (this.state.showModal) {
@@ -87,9 +122,14 @@ export default class Console extends React.Component {
   };
 
   handleTableChange = pagination => {
-    console.log(pagination);
+    // console.log(pagination);
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
+    const obj = {
+      limit: 6,
+      offset: (pagination.current - 1) * this.state.limit
+    };
+    this.queryMenus(obj);
     this.setState({
       pagination: pager
     });
@@ -180,23 +220,66 @@ export default class Console extends React.Component {
 
   handleOk = e => {
     console.log(e);
+    // const sendData = this.state.sendData;
     switch (this.state.showModal) {
       case 1: // 新增 调接口
-        console.log(this.state.sendData);
+        // console.log(this.state.sendData);
+        this.formRef.props.form.validateFields((err, values) => {
+          console.log(values);
+          if (!err) {
+            console.log(values);
+            this.addMenu({
+              name: values.name,
+              remark: values.remark,
+              sort: values.sort,
+              target: values.target,
+              icon_url: values.icon_url,
+              children: values.children,
+              parent_id: values.parent_id
+            });
+            // const num = this.state.showModal === 3 ? 2 : 0;
+            this.setState({
+              showModal: 0
+            });
+          }
+        });
         break;
       case 2: // 修改  调接口
-        console.log(this.state.sendData);
+        // console.log(this.state.sendData);
+        // const obj = {
+        //   url: '555',
+        //   query: this.state.sendData
+        // };
+        this.formRef.props.form.validateFields((err, values) => {
+          console.log(values);
+          if (!err) {
+            console.log(values);
+            this.reviseMenu({
+              url: this.state.sendData._id,
+              query: {
+                name: values.name,
+                remark: values.remark,
+                sort: values.sort,
+                target: values.target,
+                icon_url: values.icon_url,
+                children: values.children,
+                parent_id: values.parent_id
+              }
+            });
+            // const num = this.state.showModal === 3 ? 2 : 0;
+            this.setState({
+              showModal: 0
+            });
+          }
+        });
         break;
       default:
         break;
     }
-    this.setState({
-      showModal: 0
-    });
   };
 
-  handleCancel = e => {
-    console.log(e);
+  handleCancel = () => {
+    // console.log(e);
     this.setState({
       showModal: 0
     });
@@ -238,7 +321,7 @@ export default class Console extends React.Component {
 
   searchMenuInfo = () => {};
 
-  deleteHandle = () => {
+  deleteHandle = (e, data) => {
     this.$modal.confirm({
       title: '你确定删除么？',
       content: '',
@@ -246,6 +329,7 @@ export default class Console extends React.Component {
       cancelText: '取消',
       centered: true,
       onOk: () => {
+        this.deleteMenu({ url: data._id });
         // sessionStorage.removeItem('user');
         // this.props.history.push('/login');
       }
@@ -253,6 +337,7 @@ export default class Console extends React.Component {
   };
 
   render() {
+    const { initMenus } = this.props;
     const nameSuffix = this.state.menuNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -291,12 +376,17 @@ export default class Console extends React.Component {
         key: 'icon_url',
         ...this.getColumnSearchProps('icon_url')
       },
-      {
-        title: '父菜单id',
-        dataIndex: 'parent_id',
-        key: 'parent_id',
-        ...this.getColumnSearchProps('parent_id')
-      },
+      // {
+      //   title: '父菜单id',
+      //   dataIndex: 'parent_id',
+      //   key: 'parent_id',
+      //   ...this.getColumnSearchProps('parent_id')
+      // },
+      // {
+      //   title: '_id',
+      //   dataIndex: '_id',
+      //   key: '_id'
+      // },
       {
         title: '操作',
         render: text => (
@@ -304,7 +394,7 @@ export default class Console extends React.Component {
             <Button type="primary" onClick={e => this.toShowModal(e, 2, text)}>
               编辑
             </Button>
-            <Button type="danger" onClick={e => this.deleteHandle(e)}>
+            <Button type="danger" onClick={e => this.deleteHandle(e, text)}>
               删除
             </Button>
           </div>
@@ -351,9 +441,21 @@ export default class Console extends React.Component {
 
         <Table
           columns={columns}
-          dataSource={this.state.data}
-          pagination={this.state.pagination}
+          // dataSource={this.state.data}
+          // pagination={this.state.pagination}
+          dataSource={
+            this.state.data.length ? this.state.data : initMenus.datas
+          }
+          pagination={
+            this.state.pagination.total !== undefined
+              ? this.state.pagination
+              : initMenus.paging
+          }
           onChange={this.handleTableChange}
+          rowKey={record => {
+            console.log(record._id);
+            return record._id;
+          }}
         />
         <Modal
           className="groupMsg_modal"
@@ -367,10 +469,27 @@ export default class Console extends React.Component {
           onCancel={this.handleCancel}
         >
           {(this.state.showModal === 1 || this.state.showModal === 2) && (
-            <AddEditMenu showModal={this.state.showModal} sendData={sendData} />
+            <AddEditMenu
+              showModal={this.state.showModal}
+              sendData={sendData}
+              wrappedComponentRef={form => (this.formRef = form)}
+            />
           )}
         </Modal>
       </div>
     );
   }
 }
+
+// export default Console;
+const mapStateToProps = state => ({
+  initMenus: state.query.initMenus
+});
+
+const mapDispatchToProps = dispatch => ({
+  getInitMenu: dispatch.query.getInitMenu
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Console);

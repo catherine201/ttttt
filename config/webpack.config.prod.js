@@ -26,6 +26,7 @@ const WebpackMonitor = require("webpack-monitor");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -515,7 +516,20 @@ module.exports = {
       port: 3030, // default -> 8081
       excludeSourceMaps: true // default 'true'
     }),
-    new UglifyJSPlugin(),
+    new UglifyJSPlugin(
+      {
+        uglifyOptions: {
+          compress: {
+            warnings: false,
+            drop_debugger: true,
+            drop_console: true,
+            pure_funcs: ['console.log'] //移除console
+          }
+        },
+        // sourceMap: config.build.productionSourceMap,
+        parallel: true
+      }
+    ),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
     //     warnings: false,

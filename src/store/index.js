@@ -1,7 +1,7 @@
 import { init } from '@rematch/core';
 import { reducer as reduxAsyncConnect } from 'redux-connect';
 // import createLoadingPlugin from '@rematch/loading';
-import createRematchPersist from '@rematch/persist';
+// import createRematchPersist from '@rematch/persist';
 import models from './modules';
 
 function createStore() {
@@ -16,11 +16,11 @@ function createStore() {
   //   }
   // };
   // const loading = createLoadingPlugin(options);
-  const persistPlugin = createRematchPersist({
-    whitelist: ['demo1', 'Fivechess'],
-    throttle: 50,
-    version: 1
-  });
+  // const persistPlugin = createRematchPersist({
+  //   // whitelist: ['menu', 'query'],
+  //   throttle: 50,
+  //   version: 1
+  // });
   // const initialState = JSON.parse(localStorage.getItem('persist:root') || '{}');
   // for (const key in initialState) {
   //   if (key !== '_persist') {
@@ -37,9 +37,9 @@ function createStore() {
       }
       // initialState
       // middlewares: [...middlewares]
-    },
+    }
     // plugins: [loading, persistPlugin]
-    plugins: [persistPlugin]
+    // plugins: [persistPlugin]
   });
 
   return store;

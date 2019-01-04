@@ -1,17 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// import { Form, Input, Tooltip, Icon } from 'antd';
+// import { Divider } from 'antd';
 import { Input, Table, Tag, Tooltip } from 'antd';
-import PropTypes from 'prop-types';
 import styles from './index.less';
 
 const Search = Input.Search;
 class ResiveControl extends React.Component {
-  static propTypes = {
-    menuArr: PropTypes.any.isRequired
-  };
-
   state = {
     tags: []
+    // data: []
   };
 
   componentDidMount() {
@@ -20,12 +18,13 @@ class ResiveControl extends React.Component {
         tags: this.props.controlData
       },
       () => {
-        // console.log(this.state.tags);
+        console.log(this.state.tags);
       }
     );
   }
 
   handleClose = removedTag => {
+    // const tags = this.state.tags.filter(tag => tag !== removedTag);
     const tags = this.state.tags;
     tags.forEach(item => {
       if (item === removedTag) {
@@ -36,11 +35,13 @@ class ResiveControl extends React.Component {
   };
 
   render() {
-    const { menuArr } = this.props;
+    const { groupArr } = this.props;
+    console.log(groupArr);
     const { tags } = this.state;
+    console.log(tags);
     const columns = [
       {
-        title: '菜单',
+        title: '分组',
         dataIndex: 'name'
       }
     ];
@@ -54,7 +55,7 @@ class ResiveControl extends React.Component {
         );
         // 先在tag里面把data 里面的数据删除，再把最新的selectedRows 添加进去
         const tags = this.state.tags;
-        menuArr.forEach(item => {
+        groupArr.forEach(item => {
           if (tags.indexOf(item._id) !== -1) {
             tags.splice(tags.indexOf(item._id), 1);
           }
@@ -68,7 +69,7 @@ class ResiveControl extends React.Component {
         });
       },
       getCheckboxProps: record => ({
-        name: record.name
+        module: record.name
       })
     };
     return (
@@ -94,7 +95,7 @@ class ResiveControl extends React.Component {
             bordered
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={menuArr}
+            dataSource={groupArr}
             pagination={false}
             scroll={{ y: 240 }}
           />
@@ -119,9 +120,10 @@ class ResiveControl extends React.Component {
           <h2>已有权限模块</h2>
           {tags &&
             tags.map(tag => {
-              const ind = menuArr.findIndex(item => item._id === tag);
-              const tagName = menuArr[ind].name;
+              const ind = groupArr.findIndex(item => item._id === tag);
+              const tagName = groupArr[ind].name;
               const isLongTag = tagName.length > 20;
+              // const isLongTag = tag.length > 20;
               const tagElem = (
                 <Tag
                   key={tag}
@@ -145,7 +147,8 @@ class ResiveControl extends React.Component {
   }
 }
 
+// export default ResiveControl;
 const mapStateToProps = state => ({
-  menuArr: state.menu.menuArr
+  groupArr: state.menu.groupArr
 });
 export default connect(mapStateToProps)(ResiveControl);

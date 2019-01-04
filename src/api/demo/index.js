@@ -1,9 +1,9 @@
 import createApi from '../createApi';
 
 const config = {
-  // 明细预览
+  // test
   test: {
-    // 报表撤回
+    // test
     url: '/game/data',
     method: 'get',
     options: {

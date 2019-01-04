@@ -1,18 +1,10 @@
 import React from 'react';
 import Loadable from 'react-loadable';
 import Router from 'react-concise-router';
-// import Home from '../views/home';
-// import Login from '../views/login';
-// import Demo from '../views/demo';
-// import NotMatch from '../views/404';
 // import NProgress from 'NProgress';
 import AppLayout from '../components/AppLayout';
 import store from '../store';
-// const Home = () => import('../views/home');
-// const Login = () => import('../views/login');
-// const Demo = () => import('../views/demo');
-// const NotMatch = () => import('../views/404');
-// const AppLayout = () => import('../components/AppLayout');
+
 const Loading = () => <div>Loading...</div>;
 
 const page = name =>
@@ -25,7 +17,6 @@ const router = new Router({
   mode: 'hash',
   routes: [
     { path: '/', component: page('home') },
-    { path: '/demo', component: page('demo') },
     { path: '/login', component: page('login') },
     { path: '/register', component: page('register') },
     {
@@ -34,19 +25,15 @@ const router = new Router({
       name: 'admin-view',
       children: [
         { path: '/', component: page('demo') },
-        { path: '/demo', component: page('demo') },
-        { path: '/baidu', component: page('iframe') },
-        { path: '/aliyun', component: page('iframe') },
-        {
-          path: '/game',
-          name: 'game-view',
-          component: page('game'),
-          children: [{ path: '/ga', component: page('demo') }]
-        },
-        // { path: '/redux-demo', component: page('ReduxDemo') },
-        // { path: '/model', component: page('Model') },
-        // { path: '/components/button', component: page('components/button') },
-        // { path: '/components/tabs', component: page('components/tabs') },
+        // { path: '/demo', component: page('demo') },
+        // { path: '/baidu', component: page('iframe') },
+        { path: '/console/:id', component: page('iframe') },
+        // // {
+        // //   path: '/game',
+        // //   name: 'game-view',
+        // //   component: page('game'),
+        // //   children: [{ path: '/ga', component: page('demo') }]
+        // // },
         { name: 404, component: page('404') }
       ]
     },
@@ -81,6 +68,11 @@ const router = new Router({
           component: page('personalCenter/console')
         }, // 控制台
         {
+          path: '/user',
+          name: 'user',
+          component: page('personalCenter/userMsg')
+        }, // 用户管理
+        {
           path: '/group',
           name: 'group',
           component: page('personalCenter/groupMsg')
@@ -105,14 +97,11 @@ const router = new Router({
 // });
 
 router.beforeEach = function(ctx, next) {
-  console.log(ctx);
-  console.log('luyoubianh ');
-  // NProgress.start();
+  NProgress.start();
   store.dispatch.demo.setCountLoading([]);
   next();
-  // next();
   setTimeout(() => {
-    // NProgress.done();
+    NProgress.done();
   }, 300);
 };
 export default router;

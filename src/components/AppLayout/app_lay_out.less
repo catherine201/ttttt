@@ -1,13 +1,19 @@
 :global{
     .menu_wrap{
         position: relative;
-      min-height: calc(~"100% - 50px");
+      // min-height: calc(~"100% - 50px");
+      min-height: calc(100vh - 50px);
+      height: auto;
+      _height: calc(100vh - 50px);
       .ant-menu-inline{
         // min-height: calc(~"100% - 50px");
       }
     }
       #root .app-layout{
+          // min-height: calc(100vh);
           min-height: calc(100vh);
+          height: auto;
+          _height: calc(100vh);
         }
         .app-layout .ant-layout-sider-dark{
           background: #1F2729;

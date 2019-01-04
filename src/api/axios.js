@@ -1,15 +1,14 @@
 import axios from 'axios';
 import { message } from 'antd';
-import { serverIpAddress } from './server_config';
+import { serverIp } from './server_config';
 import loadingImg from '../assets/images/loading.gif';
 import store from '../store/index';
 
-// axios.defaults.baseURL = serverIpAddress;
+axios.defaults.baseURL = serverIp.logic;
 axios.defaults.timeout = 60000;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 // 请求前统一添加token
-// axios.defaults.headers.common.accessToken = `555`;
-
+// axios.defaults.headers.common.authorization = getToken();
 let count = 0;
 // http request 拦截器
 axios.interceptors.request.use(
@@ -21,7 +20,7 @@ axios.interceptors.request.use(
     config.headers.num = count;
     if (config.method === 'get') {
       // 加个随机数解决有些ie 浏览器卡死的问题
-      config.url = `${config.url}?${Math.random()}`;
+      // config.url = `${config.url}?${Math.random()}`;
     }
     // 取消请求
     // config.cancelToken = new axios.CancelToken(cancel => {
@@ -45,18 +44,53 @@ axios.interceptors.response.use(
     const originArr = store.getState().demo.countLoadingArr;
     originArr.splice(originArr.indexOf(num), 1);
     store.dispatch.demo.setCountLoading(originArr);
-    const Info = JSON.parse(window.localStorage.getItem('objStr'));
-    if (res.data.code === 100010 || res.data.code === 100050) {
-      message.error('This is a message of error', 1000, () => {
-        if (Info) {
-          window.localStorage.clear();
-          window.location.href = '/登录';
-        }
-      });
-    }
+    // if (res.data.code === 100010 || res.data.code === 100050) {
+    //   message.error('This is a message of error', 1000, () => {
+    //     if (Info) {
+    //       window.localStorage.clear();
+    //       window.location.href = '/登录';
+    //     }
+    //   });
+    // }
     return res;
   },
   error => {
+    let errorMsg = '';
+    console.dir(error);
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          errorMsg = '400请求错误';
+          break;
+        case 401:
+          errorMsg = 'token已过期';
+          window.sessionStorage.clear();
+          window.location.href = '/#/login';
+          break;
+        case 404:
+          errorMsg = '404请求地址出错';
+          break;
+        case 408:
+          errorMsg = '408请求超时';
+          break;
+        case 500:
+          errorMsg = '500服务器内部错误';
+          break;
+        case 502:
+          errorMsg = '502网关错误';
+          break;
+        case 504:
+          errorMsg = '504网关超时';
+          break;
+        default:
+          errorMsg = '请求失败';
+      }
+    } else if (error.request) {
+      errorMsg = '请求失败';
+    } else {
+      errorMsg = error.message;
+    }
+    message.error(errorMsg);
     const num = JSON.parse(JSON.stringify(error)).config.headers.num;
     const originArr = store.getState().demo.countLoadingArr;
     originArr.splice(originArr.indexOf(num), 1);
@@ -114,16 +148,18 @@ function fetchApi(param, options) {
     axios(param)
       .then(response => {
         console.log(response);
-        if (options.errorHandler) {
-          switch (response.data.code) {
-            case 0:
-              message.success(response.data.msg);
-              return resolve(response.data);
-            default:
-              // message.error(response.data.msg);
-              return resolve(response.data);
+        if (response) {
+          if (options.errorHandler) {
+            return resolve(response.data);
+            // switch (response.data.code) {
+            //   case 0:
+            //     message.success(response.data.msg);
+            //     return resolve(response.data);
+            //   default:
+            //     // message.error(response.data.msg);
+            //     return resolve(response.data);
+            // }
           }
-        } else {
           return resolve(response.data);
         }
       })
@@ -134,6 +170,10 @@ function fetchApi(param, options) {
           switch (error.response.status) {
             case 400:
               errorMsg = '400请求错误';
+              break;
+            case 401:
+              errorMsg = 'token已过期';
+              window.sessionStorage.clear();
               break;
             case 404:
               errorMsg = '404请求地址出错';
@@ -151,7 +191,7 @@ function fetchApi(param, options) {
               errorMsg = '504网关超时';
               break;
             default:
-              errorMsg = 'w';
+              errorMsg = '请求失败';
           }
         } else if (error.request) {
           errorMsg = '请求失败';
@@ -182,22 +222,36 @@ function fetchApi(param, options) {
   });
 }
 
+function getToken() {
+  console.log(sessionStorage.getItem('user'));
+  return sessionStorage.getItem('user')
+    ? JSON.parse(sessionStorage.getItem('user')).second_access_token
+    : '';
+}
 export function get(url, data, options) {
+  // console.log(options.baseUrl || serverIp);
   const param = {
     method: 'GET',
     url,
     params: data,
-    baseURL: options.baseUrl || serverIpAddress
+    baseURL: options.baseUrl || serverIp.logic,
+    headers: {
+      authorization: getToken()
+    }
   };
   return fetchApi(param, options);
 }
 
 export function post(url, data, options) {
+  console.log(options.baseUrl || serverIp.logic);
   const param = {
     method: 'POST',
     url,
     data,
-    baseURL: options.baseUrl || serverIpAddress
+    baseURL: options.baseUrl || serverIp.logic,
+    headers: {
+      authorization: getToken()
+    }
   };
   return fetchApi(param, options);
 }
@@ -208,9 +262,10 @@ export function postUploadFile(url, data, options) {
     url,
     data,
     headers: {
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'multipart/form-data',
+      authorization: getToken()
     },
-    baseURL: options.baseUrl || serverIpAddress
+    baseURL: options.baseUrl || serverIp.logic
   };
   return fetchApi(param, options);
 }
@@ -220,7 +275,10 @@ export function del(url, data, options) {
     method: 'DELETE',
     url,
     params: data,
-    baseURL: options.baseUrl || serverIpAddress
+    baseURL: options.baseUrl || serverIp.logic,
+    headers: {
+      authorization: getToken()
+    }
   };
   return fetchApi(param, options);
 }
@@ -230,7 +288,10 @@ export function put(url, data, options) {
     method: 'PUT',
     url,
     data,
-    baseURL: options.baseUrl || serverIpAddress
+    baseURL: options.baseUrl || serverIp.logic,
+    headers: {
+      authorization: getToken()
+    }
   };
   return fetchApi(param, options);
 }

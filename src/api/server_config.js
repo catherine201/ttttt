@@ -1,8 +1,16 @@
 function resolveIp() {
   const mode = process.env.NODE_ENV.trim();
   if (mode === 'development') {
-    return 'http://192.168.1.96:51002';
+    return {
+      login: '/log',
+      thirdServer: '/third',
+      logic: '/fangman'
+    };
   }
-  return 'http://localhost:3333';
+  return {
+    login: '',
+    thirdServer: '',
+    logic: ''
+  };
 }
-export const serverIpAddress = resolveIp();
+export const serverIp = resolveIp();

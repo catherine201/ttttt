@@ -1,153 +1,106 @@
 import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const logoImg = require('../../assets/images/logo.png');
 
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-export default class AppSider extends React.Component {
+class AppSider extends React.Component {
   state = {
-    menu: [
-      {
-        key: 'dashboard',
-        path: '/admin',
-        text: '产品与服务',
-        icon: 'cloud'
-      },
-      {
-        key: 'baidu',
-        path: '/admin/baidu',
-        text: 'baidu',
-        icon: 'cloud'
-      },
-      {
-        key: 'aliyun',
-        path: '/admin/aliyun',
-        text: 'aliyun',
-        icon: 'cloud'
-      }
-      // {
-      //   key: 'components',
-      //   text: 'Components',
-      //   icon: 'appstore-o',
-      //   submenu: [{ key: 'm-button', path: '/admin/baidu', text: 'baidu' }]
-      // },
-      // {
-      //   key: 'users',
-      //   text: 'Users',
-      //   icon: 'contacts',
-      //   submenu: [{ key: 'user', path: '/admin/aliyun', text: 'aliyun' }]
-      // },
-      // {
-      //   key: 'pages',
-      //   text: 'Pages',
-      //   icon: 'eye-o',
-      //   submenu: [
-      //     { key: 'g-404', path: '/404', text: '全局404' },
-      //     { key: '404', path: '/admin/404', text: '404' },
-      //     { key: 'redux-demo', path: '/admin/redux-demo', text: 'redux-demo' },
-      //     { key: 'model-demo', path: '/admin/model', text: 'model-demo' }
-      //   ]
-      // },
-      // {
-      //   key: 'setting',
-      //   text: 'Setting',
-      //   icon: 'setting',
-      //   submenu: [{ key: 'test', text: 'Test', path: '/' }]
-      // }
-    ]
+    // limit: 100,
+    // menu: []
   };
+
+  componentDidMount() {
+    // const obj = {
+    //   url: `${JSON.parse(sessionStorage.getItem('user'))._id}/menus`,
+    //   query: {
+    //     limit: this.state.limit,
+    //     offset: 0
+    //   }
+    // };
+    // this.queryUser(obj);
+  }
+
+  // queryUser = async obj => {
+  //   const res = await createApi.queryUser(obj);
+  //   if (res) {
+  //     // this.setState({
+  //     //   menu: res.datas
+  //     // });
+  //     this.setState({
+  //       menu: res.datas
+  //     });
+  //     // console.log(pagination.total);
+  //   }
+  // };
 
   generateMenu = function(menus) {
     let items = [];
-    items = menus.map(menu => {
-      if (Array.isArray(menu.submenu)) {
-        return (
-          <SubMenu
-            key={menu.key}
-            title={
-              <div>
-                <Icon type={menu.icon} />
-                <span>{menu.text}</span>
-              </div>
-            }
-          >
-            {generateMenu(menu.submenu, true)}
-          </SubMenu>
-        );
-      }
-      return (
-        <Menu.Item key={menu.key}>
-          {menu.type === 'a' ? (
-            <a href={menu.path}>
-              {menu.icon ? <Icon type={menu.icon} /> : ''}
-              <span className="nav-text">{menu.text}</span>
-            </a>
+    items = menus.map(menu => (
+      // if (Array.isArray(menu.submenu)) {
+      //   return (
+      //     <SubMenu
+      //       key={menu.key}
+      //       title={
+      //         <div>
+      //           <Icon type={menu.icon} />
+      //           <span>{menu.text}</span>
+      //         </div>
+      //       }
+      //     >
+      //       {generateMenu(menu.submenu, true)}
+      //     </SubMenu>
+      //   );
+      // }
+      <Menu.Item key={menu._id}>
+        <p
+          onClick={() => {
+            this.toHref(menu._id);
+          }}
+        >
+          {/* {menu.icon_url ? <img src={menu.icon_url} alt="" /> : ''} */}
+          <Icon type="appstore" />
+          <span className="nav-text">{menu.name}</span>
+          {/* {!this.props.collapsed ? (
+            <span className="nav-text">{menu.name}</span>
           ) : (
-            <Link to={menu.path}>
-              {menu.icon ? <Icon type={menu.icon} /> : ''}
-              <span className="nav-text">{menu.text}</span>
-            </Link>
-          )}
-        </Menu.Item>
-      );
-    });
+            ''
+          )} */}
+        </p>
+      </Menu.Item>
+    ));
     return items;
   };
 
+  toHref(target) {
+    console.log(target);
+    console.log(this);
+    this.props.history.push(`/admin/console/${target}`);
+  }
+
   render() {
+    const { ownMenuArr } = this.props;
     return (
       <Sider collapsed={this.props.collapsed} trigger={null}>
         <div className="logo-box">
           <img className="logo" src={logoImg} alt="logo" />
-          <span className="title">Euen PlatForm </span>
+          <span className="title">Leeker Labs PlatForm </span>
         </div>
         <div className="menu_wrap">
           <Menu theme="dark" mode="inline">
-            {this.generateMenu(this.state.menu)}
-            {/* <SubMenu key="sub1" title={<div><Icon type="dashboard" /><span>Dashboard</span></div>}>
-            <Menu.Item key="1"><Link to="/admin" >Wellcome</Link></Menu.Item>
-            <Menu.Item key="2">option2</Menu.Item>
-            <Menu.Item key="3">option3</Menu.Item>
-            <Menu.Item key="4">option4</Menu.Item>
-          </SubMenu>
-          <SubMenu key="xxx" title={<div><Icon type="appstore-o" /><span>Components</span></div>}>
-            <Menu.Item key="button"><Link to="/admin/components/button" >MButton</Link></Menu.Item>
-            <Menu.Item key="x6">option6</Menu.Item>
-            <Menu.Item key="x7">option7</Menu.Item>
-            <Menu.Item key="x8">option8</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" title={<div><Icon type="contacts" /><span>Users</span></div>}>
-            <Menu.Item key="5"><Link to="/admin/user" >user</Link></Menu.Item>
-            <Menu.Item key="6">option6</Menu.Item>
-            <Menu.Item key="7">option7</Menu.Item>
-            <Menu.Item key="8">option8</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub3" title={<div><Icon type="eye-o" /><span>Pages</span></div>}>
-            <Menu.Item key="404"><Link to="/404" >全局404</Link></Menu.Item>
-            <Menu.Item key="404-in"><Link to="/admin/404" >页内404</Link></Menu.Item>
-            <Menu.Item key="10"><Link to="/admin/redux-demo" >redux-demo</Link></Menu.Item>
-            <Menu.Item key="11">option11</Menu.Item>
-            <Menu.Item key="12">option12</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sss" title={<div><Icon type="setting" /><span>Setting</span></div>}>
-            <Menu.Item key="sss"><Link to="/404" >全局404</Link></Menu.Item>
-            <Menu.Item key="ss-in"><Link to="/admin/404" >页内404</Link></Menu.Item>
-            <Menu.Item key="ssa"><Link to="/admin/redux-demo" >redux-demo</Link></Menu.Item>
-            <Menu.Item key="aaaa">option11</Menu.Item>
-            <Menu.Item key="sass">option12</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="copyright">
-            <a href="https://pro.ant.design" ><Icon type="ant-design" /><span>ant-design</span></a>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to="/admin/redux-demo" ><Icon type="ant-design" /><span>redux-demo</span></Link>
-          </Menu.Item> */}
+            {this.generateMenu(ownMenuArr)}
           </Menu>
         </div>
       </Sider>
     );
   }
 }
+
+// export default AppSider;
+const mapStateToProps = state => ({
+  ownMenuArr: state.menu.ownMenuArr
+});
+export default connect(mapStateToProps)(AppSider);

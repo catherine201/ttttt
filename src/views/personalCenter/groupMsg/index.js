@@ -1,61 +1,74 @@
 import React from 'react';
+import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
 import { Table, Input, Button, Icon, Divider, Modal } from 'antd';
 import Highlighter from 'react-highlight-words';
 import AddEditGroup from './addEditGroup';
 import ReviseControl from './reviseControl';
+import CheckUser from './checkUser';
 import styles from './index.less';
+import createApi from '../../../api/groupMsg';
+import { idToName } from '../../../utils';
 
-export default class Console extends React.Component {
-  static propTypes = {};
+class Console extends React.Component {
+  static propTypes = {
+    // getMenu: PropTypes.func.isRequired
+  };
 
   constructor(props) {
     super(props);
     this.state = {
+      isShow: true,
       searchText: '', // table里面的search
       groupNameInput: '', // 头部的查询
       groupDescInput: '',
-      pagination: {},
+      pagination: {
+        defaultCurrent: 1,
+        defaultPageSize: 6
+      },
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增分组  2 表示显示 编辑分组 3 表示显示修改组权限
-      data: [
-        {
-          key: '1',
-          name: '客服组',
-          description: '客服',
-          menu_ids: ['A模块', 'B模块', 'C模块', 'D模块', 'E模块']
-        },
-        {
-          key: '2',
-          name: '技术组',
-          description: '技术',
-          menu_ids: ['A模块', 'B模块', 'C模块', 'D模块', 'E模块']
-        },
-        {
-          key: '3',
-          name: '人事组',
-          description: '人事',
-          menu_ids: ['A模块', 'B模块', 'C模块', 'D模块', 'E模块']
-        },
-        {
-          key: '4',
-          name: '会计组',
-          description: '会计',
-          menu_ids: ['A模块', 'B模块', 'C模块', 'D模块', 'E模块']
-        }
-      ],
+      data: [],
       sendData: {}, // 发送给新增编辑组件的值
       originalSendData: {}, // 发送给新增编辑组件的最初值
-      editSendData: {} // 发送给修改权限组件的值
+      editSendData: {}, // 发送给修改权限组件的值
+      limit: 6,
+      userInfo: [] // 用户信息
     };
     this.handleEdit = this.handleEdit.bind(this);
   }
 
   componentDidMount() {
-    const pagination = { ...this.state.pagination };
-    pagination.total = 20;
-    this.setState({
-      pagination
-    });
+    !this.props.menuArr.length ? this.props.getMenu() : false;
+    !this.props.initGroup.datas ? this.props.getInitGroup() : false;
+    // console.log('重新创建');
+    // const obj = {
+    //   limit: this.state.limit,
+    //   offset: 0
+    // };
+    // this.queryTeams(obj);
   }
+
+  queryTeams = async obj => {
+    const res = await createApi.queryTeams(obj);
+    if (res && res.datas) {
+      const pagination = { ...this.state.pagination };
+      pagination.total = res.paging.total;
+      pagination.total = res.paging.total;
+      this.setState({
+        pagination,
+        data: res.datas
+      });
+    }
+  };
+
+  queryUsers = async obj => {
+    const res = await createApi.queryTeams(obj);
+    if (res && res.datas) {
+      this.setState({
+        userInfo: res.datas
+      });
+    }
+  };
 
   moDalTitle = () => {
     switch (this.state.showModal) {
@@ -65,6 +78,8 @@ export default class Console extends React.Component {
         return '编辑分组';
       case 3:
         return '修改组权限';
+      case 4:
+        return '查看用户';
       default:
         return '';
     }
@@ -83,6 +98,11 @@ export default class Console extends React.Component {
   handleTableChange = pagination => {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
+    const obj = {
+      limit: 6,
+      offset: (pagination.current - 1) * this.state.limit
+    };
+    this.queryTeams(obj);
     this.setState({
       pagination: pager
     });
@@ -171,25 +191,116 @@ export default class Console extends React.Component {
     this.setState({ groupDescInput: '' });
   };
 
+  addTeam = async obj => {
+    const res = await createApi.addTeam(obj);
+    if (res) {
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryTeams(obj);
+    }
+  };
+
+  revise = async (bool, sendData) => {
+    if (!bool) {
+      const obj = {
+        url: `${sendData._id}/menus`,
+        query: {
+          menu_ids: sendData.menu_ids
+        }
+      };
+      const res = await createApi.reviseTeam(obj);
+      if (res) {
+        this.reviseTeam({
+          url: sendData._id,
+          query: {
+            name: sendData.name,
+            description: sendData.description
+          }
+        });
+      }
+    } else {
+      this.reviseTeam({
+        url: sendData._id,
+        query: {
+          name: sendData.name,
+          description: sendData.description
+        }
+      });
+    }
+  };
+
+  reviseTeam = async obj => {
+    const res = await createApi.reviseTeam(obj);
+    if (res) {
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryTeams(obj);
+    }
+  };
+
+  deleteTeam = async obj => {
+    const res = await createApi.deleteTeam(obj);
+    if (res) {
+      const obj = {
+        limit: this.state.limit,
+        offset: this.state.pagination.current
+          ? (this.state.pagination.current - 1) * this.state.limit
+          : 0
+      };
+      this.queryTeams(obj);
+    }
+  };
+
   handleOk = e => {
     console.log(e);
+    const { sendData } = this.state;
+    const num = this.state.showModal === 3 ? 2 : 0;
     switch (this.state.showModal) {
       case 1: // 新增
-        console.log(this.state.sendData);
+        this.formRef.props.form.validateFields((err, values) => {
+          if (!err) {
+            this.addTeam({
+              name: values.name,
+              description: values.description
+            });
+            this.setState({
+              showModal: num
+            });
+          }
+        });
         break;
       case 2: // 修改  这里需要先调用修改权限的再修改名称
-        console.log(this.state.sendData);
+        this.formRef.props.form.validateFields((err, values) => {
+          if (!err) {
+            console.log(values);
+            // 是否需要先请求修改权限
+            const bool = this.state.sendData.menu_ids.equals(
+              this.state.originalSendData.menu_ids
+            );
+            this.revise(bool, sendData);
+            // const num = this.state.showModal === 3 ? 2 : 0;
+            this.setState({
+              showModal: num
+            });
+          }
+        });
         break;
-      // case 3: // 修改权限
-      //   console.log(this.state.sendData);
-      //   break;
+      case 3: // 修改权限
+        this.setState({
+          showModal: num
+        });
+        break;
       default:
         break;
     }
-    const num = this.state.showModal === 3 ? 2 : 0;
-    this.setState({
-      showModal: num
-    });
   };
 
   handleCancel = () => {
@@ -230,6 +341,17 @@ export default class Console extends React.Component {
           sendData: JSON.parse(JSON.stringify(data))
         });
         break;
+      case 4:
+        // console.log(data);
+        const obj = {
+          url: `${data._id}/accounts`,
+          query: {
+            limit: 100,
+            offset: 0
+          }
+        };
+        this.queryUsers(obj);
+        break;
       default:
         break;
     }
@@ -245,7 +367,7 @@ export default class Console extends React.Component {
     });
   };
 
-  deleteHandle = () => {
+  deleteHandle = (e, data) => {
     this.$modal.confirm({
       title: '你确定删除么？',
       content: '',
@@ -253,14 +375,14 @@ export default class Console extends React.Component {
       cancelText: '取消',
       centered: true,
       onOk: () => {
-        // sessionStorage.removeItem('user');
-        // this.props.history.push('/login');
+        this.deleteTeam({ url: data._id });
       }
     });
   };
 
   render() {
-    const { sendData, editSendData } = this.state;
+    const { menuArr, initGroup } = this.props;
+    const { sendData, editSendData, userInfo } = this.state;
     const nameSuffix = this.state.groupNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -280,23 +402,22 @@ export default class Console extends React.Component {
         dataIndex: 'description',
         key: 'description',
         width: '20%',
-        ...this.getColumnSearchProps('desc')
+        ...this.getColumnSearchProps('description')
       },
       {
         title: '权限模块',
-        dataIndex: 'menu_ids',
-        key: 'menu_ids',
         width: '20%',
-        render: tags => (
+        render: text => (
+          // console.log(text);
           <span>
-            {tags.map(tag => (
-              <span color="blue" key={tag}>
-                {tag}
-              </span>
-            ))}
+            {/* {text.menu_ids.map(tag => (
+                <span color="blue" key={tag}>
+                  {tag}
+                </span>
+              ))} */}
+            {idToName(text.menu_ids, menuArr)}
           </span>
-        ),
-        ...this.getColumnSearchProps('control')
+        )
       },
       {
         title: '操作',
@@ -305,7 +426,10 @@ export default class Console extends React.Component {
             <Button type="primary" onClick={e => this.toShowModal(e, 2, text)}>
               编辑
             </Button>
-            <Button type="danger" onClick={e => this.deleteHandle(e)}>
+            <Button type="primary" onClick={e => this.toShowModal(e, 4, text)}>
+              查看用户
+            </Button>
+            <Button type="danger" onClick={e => this.deleteHandle(e, text)}>
               删除
             </Button>
           </div>
@@ -350,14 +474,30 @@ export default class Console extends React.Component {
           </Button>
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={this.state.data}
-          pagination={this.state.pagination}
-          onChange={this.handleTableChange}
-        />
+        {this.state.isShow && (
+          <Table
+            columns={columns}
+            // dataSource={this.state.data}
+            // pagination={this.state.pagination}
+            dataSource={
+              this.state.data.length ? this.state.data : initGroup.datas
+            }
+            pagination={
+              this.state.pagination.total !== undefined
+                ? this.state.pagination
+                : initGroup.paging
+            }
+            onChange={this.handleTableChange}
+            rowKey={record => {
+              console.log(record._id);
+              return record._id;
+            }}
+          />
+        )}
         <Modal
-          className="groupMsg_modal"
+          className={`groupMsg_modal ${
+            this.state.showModal === 4 ? 'noFooter' : ''
+          }`}
           title={this.moDalTitle()}
           // {this.state.showModal === 3 && width={860}}
           width={this.state.showModal === 3 ? 860 : 540}
@@ -373,13 +513,29 @@ export default class Console extends React.Component {
               showModal={this.state.showModal}
               handleEdit={this.handleEdit}
               sendData={sendData}
+              wrappedComponentRef={form => (this.formRef = form)}
             />
           )}
           {this.state.showModal === 3 && (
             <ReviseControl controlData={editSendData} />
           )}
+          {this.state.showModal === 4 && <CheckUser userInfo={userInfo} />}
         </Modal>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  menuArr: state.menu.menuArr,
+  initGroup: state.query.initGroup
+});
+
+const mapDispatchToProps = dispatch => ({
+  getMenu: dispatch.menu.getMenu,
+  getInitGroup: dispatch.query.getInitGroup
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Console);

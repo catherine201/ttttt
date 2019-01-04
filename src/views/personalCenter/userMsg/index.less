@@ -2,6 +2,20 @@
 .groupMsg_wrapper{
     padding: 10px 20px;
     width: 100%;
+    .Icon{
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .dotSpan{
+        float: left;
+        display: inline-block;
+        max-width: 150px;
+        width: auto;
+        _width:150px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap; 
+    }
     .result_top{
       height: 60px;
       line-height: 60px;
@@ -45,24 +59,10 @@
            }
     }
 }
-
 :global{
-    .user_tab{
-        table, .ant-table-thead > tr > th{
-            text-align: center;
-        }
-    }
 p, h2{
     margin-bottom: 0;
 }
-.groupMsg_modal{
-&.noFooter{
-    // display: none;
-    .ant-modal-footer{
-        display: none;
-    }
-}
-} 
 // index
 .groupMsg_wrapper{
     .action{

@@ -1,4 +1,5 @@
 import createApi from '../createApi';
+import { serverIp } from '../server_config';
 
 const config = {
   // 注册
@@ -7,7 +8,8 @@ const config = {
     method: 'post',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: true,
+      baseUrl: serverIp.login
     }
   },
   // 预登录
@@ -16,7 +18,8 @@ const config = {
     method: 'post',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: true,
+      baseUrl: serverIp.login
     }
   },
   // 最终登录
@@ -25,8 +28,16 @@ const config = {
     method: 'post',
     options: {
       errorHandler: true,
-      showLoading: true,
-      baseUrl: 'http://192.168.1.189:3033'
+      showLoading: true
+    }
+  },
+  // 登出
+  logout: {
+    url: '/logout',
+    method: 'post',
+    options: {
+      errorHandler: false,
+      showLoading: false
     }
   }
 };

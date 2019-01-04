@@ -15,10 +15,10 @@ export default class Home extends React.Component {
       <div className="middle-box">
         {/* <div className="m-box"></div> */}
         <div>
-          <img src={imgSrc} alt="logo" />
+          <img src={imgSrc} alt="logo" className="home_logo" />
         </div>
-        <div style={{ margin: '10px 0' }}>
-          <h1>Euen 后台管理系统</h1>
+        <div style={{ margin: '20px 0' }}>
+          <h1>Leeker Labs 后台管理系统</h1>
         </div>
         <div>
           <Button

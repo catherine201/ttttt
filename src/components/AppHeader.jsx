@@ -1,21 +1,38 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Layout, Menu, Icon, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 import { requestFullScreen, exitFullscreen } from '../utils/index';
+import createApi from '../api/registerAndLogin';
 
 const { Header } = Layout;
 
-export default class AppHeader extends React.Component {
+class AppHeader extends React.Component {
   state = {
     fullscreen: false
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.init();
+  }
+
+  logout = async () => {
+    const res = await createApi.logout();
+    if (res) {
+      sessionStorage.removeItem('user');
+      window.sessionStorage.clear();
+      this.props.history.push('/login');
+    }
+  };
 
   toHref = addr => {
-    console.log(this);
     this.props.history.push(addr);
   };
+
+  init() {
+    // !this.props.menuArr.length ? this.props.getMenu() : false;
+    // !this.props.groupArr.length ? this.props.getGroup() : false;
+  }
 
   fullscreenTrigger() {
     if (this.state.fullscreen) {
@@ -35,8 +52,7 @@ export default class AppHeader extends React.Component {
       okText: '确定',
       cancelText: '再看一会',
       onOk: () => {
-        sessionStorage.removeItem('user');
-        this.props.history.push('/login');
+        this.logout();
       }
     });
   }
@@ -44,7 +60,7 @@ export default class AppHeader extends React.Component {
   dropdownMenu() {
     return (
       <Menu>
-        <Menu.Item key="0" onClick={() => this.toHref('/personalCenter/')}>
+        {/* <Menu.Item key="0" onClick={() => this.toHref('/personalCenter/')}>
           <Icon type="user" style={{ marginRight: '5px' }} />
           个人信息
         </Menu.Item>
@@ -75,17 +91,21 @@ export default class AppHeader extends React.Component {
         >
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           控制台
+        </Menu.Item> */}
+        <Menu.Item key="5" onClick={() => this.toHref('/personalCenter/user')}>
+          <Icon type="check-circle" style={{ marginRight: '5px' }} />
+          用户管理
         </Menu.Item>
-        <Menu.Item key="5" onClick={() => this.toHref('/personalCenter/group')}>
+        <Menu.Item key="6" onClick={() => this.toHref('/personalCenter/group')}>
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           分组管理
         </Menu.Item>
-        <Menu.Item key="6" onClick={() => this.toHref('/personalCenter/menu')}>
+        <Menu.Item key="7" onClick={() => this.toHref('/personalCenter/menu')}>
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           菜单管理
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="7" onClick={() => this.doLogout()}>
+        <Menu.Item key="8" onClick={() => this.doLogout()}>
           <Icon type="logout" style={{ marginRight: '5px' }} />
           退出
         </Menu.Item>
@@ -144,7 +164,7 @@ export default class AppHeader extends React.Component {
                     alt="user"
                     className="user-avator"
                   />
-                  {JSON.parse(window.sessionStorage.getItem('user')).username}
+                  {JSON.parse(window.sessionStorage.getItem('user')).name}
                   <Icon type="down" />
                 </a>
               </Dropdown>
@@ -161,13 +181,13 @@ export default class AppHeader extends React.Component {
                 <Icon type={this.state.fullscreen ? 'shrink' : 'arrows-alt'} />
               </a>
             </li>
-            <li>
+            {/* <li>
               <Dropdown overlay={this.dropdownSetting()} trigger={['click']}>
                 <a className="ant-dropdown-link" href="#/">
                   <Icon type="setting" />
                 </a>
               </Dropdown>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div>
@@ -175,39 +195,31 @@ export default class AppHeader extends React.Component {
             <Menu.Item key="1">
               <Link to="/admin">Home</Link>
             </Menu.Item>
-            {/* <Menu.Item key="8">
-              <a
-                href="https://ant.design/docs/react/introduce-cn"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon type="ant-design" style={{ marginRight: '5px' }} />
-                Antd
-              </a>
-            </Menu.Item>
-            <Menu.Item key="9">
-              <a
-                href="https://motion.ant.design"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon type="ant-design" style={{ marginRight: '5px' }} />
-                Motion
-              </a>
-            </Menu.Item>
-            <Menu.Item key="10">
-              <a
-                href="https://pro.ant.design"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon type="ant-design" style={{ marginRight: '5px' }} /> Design
-                Pro
-              </a>
-            </Menu.Item> */}
           </Menu>
         </div>
       </Header>
     );
   }
 }
+
+// export default AppHeader;
+const mapStateToProps = state => ({
+  menuArr: state.menu.menuArr,
+  groupArr: state.menu.groupArr,
+  initMenus: state.query.initMenus,
+  initGroup: state.query.initGroup,
+  initUser: state.query.initUser
+});
+
+const mapDispatchToProps = dispatch => ({
+  getMenu: dispatch.menu.getMenu,
+  getGroup: dispatch.menu.getGroup,
+  getInitMenu: dispatch.query.getInitMenu,
+  getInitUser: dispatch.query.getInitUser,
+  getInitGroup: dispatch.query.getInitGroup
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppHeader);

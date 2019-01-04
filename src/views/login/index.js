@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Icon, Checkbox } from 'antd';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './login.less';
 import createApi from '../../api/registerAndLogin';
@@ -27,31 +28,24 @@ class Login extends React.Component {
 
   login = async obj => {
     const res = await createApi.login(obj);
-    if (res) {
-      // this.setState({
-      //   isLoding: false
-      // });
-      // sessionStorage.setItem('user', JSON.stringify(res.data));
-      console.log(res);
+    if (res && res.error_code === 1) {
+      const userObj = res.data;
       const info = {
         access_token: res.data.access_token,
         open_id: res.data.openid
       };
       const result = await createApi.secondLogin(info);
       if (result) {
-        this.$msg.success('登陆成功');
-        setTimeout(() => {
-          this.props.history.push('/admin');
-        }, 500);
+        this.props.dispatch.menu.getOwnMenu();
+        userObj.second_access_token = result.access_token;
+        userObj._id = result.user_id;
+        sessionStorage.setItem('user', JSON.stringify(userObj));
+        this.props.history.push('/personalCenter/user');
       } else {
         this.$msg.error('登陆失败');
       }
-      // sessionStorage.setItem('user', JSON.stringify(res));
     } else {
-      // this.setState({
-      //   isLoding: false
-      // });
-      this.$msg.error('授权失败');
+      this.$msg.error(res.message);
     }
   };
 
@@ -59,26 +53,22 @@ class Login extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        sessionStorage.setItem('user', JSON.stringify(values));
-        // this.setState({
-        //   isLoding: true
-        // });
         const obj = {
           name: values.username,
           password: values.password
         };
         this.login(obj);
-        // this.$msg.loading('正在登陆...', 2, () => {
-        //   this.setState({
-        //     isLoding: false
-        //   });
-        //   this.$msg.success('登陆成功');
-        //   setTimeout(() => {
-        //     this.props.history.push('/admin');
-        //   }, 500);
-        // });
       }
     });
+  };
+
+  validateToPassword = (rule, value, callback) => {
+    const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
+    if (value && reg.test(value)) {
+      callback();
+    } else {
+      callback('密码至少为8位的字母,数字,字符任意两种的组合!');
+    }
   };
 
   toRegister = e => {
@@ -109,14 +99,12 @@ class Login extends React.Component {
             className="text-center"
             style={{ color: '#1890FF', fontSize: 'rgba(24, 144, 255, 0.91)' }}
           >
-            EUEN ADMIN
+            Leeker Labs
           </h1>
           <Form onSubmit={this.onSubmit}>
             <Form.Item>
               {getFieldDecorator('username', {
-                rules: [
-                  { required: true, message: 'Please input your username!' }
-                ]
+                rules: [{ required: true, message: '请输入用户名!' }]
               })(
                 <Input
                   size="large"
@@ -130,7 +118,10 @@ class Login extends React.Component {
             <Form.Item>
               {getFieldDecorator('password', {
                 rules: [
-                  { required: true, message: 'Please input your Password!' }
+                  { required: true, message: '请输入密码!' },
+                  {
+                    validator: this.validateToPassword
+                  }
                 ]
               })(
                 <Input
@@ -166,7 +157,7 @@ class Login extends React.Component {
           </Form>
 
           <div style={{ color: '#9fa8b1' }} className="text-center">
-            Euen admin platform
+            Leeker Labs platform
           </div>
         </div>
       </div>
@@ -174,4 +165,14 @@ class Login extends React.Component {
   }
 }
 
-export default Form.create()(Login);
+// export default Form.create()(Login);
+
+const mapDispatchToProps = dispatch => ({
+  // getMenu: dispatch.menu.getMenu,
+  // getGroup: dispatch.menu.getGroup,
+  getOwnMenu: dispatch.menu.getOwnMenu
+});
+export default connect(
+  // mapStateToProps,
+  mapDispatchToProps
+)(Form.create()(Login));

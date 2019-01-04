@@ -14,7 +14,6 @@ export default class NotMatch extends React.Component {
   }
 
   render() {
-    // return <div className="m-box"><div style={{color: '#D82C36'}}>404 Page Not Found !</div></div>
     const cx = classNames({
       [styles['error-panel']]: true,
       fadeInUp: true
@@ -30,7 +29,7 @@ export default class NotMatch extends React.Component {
           &nbsp;
           <Button onClick={() => this.handlerBack()}>返回</Button>
         </div>
-        <p className={styles.copyright}>Make by Euen</p>
+        <p className={styles.copyright}>Make by Leeker Labs</p>
       </div>
     );
   }

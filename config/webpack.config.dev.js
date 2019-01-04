@@ -134,22 +134,29 @@ module.exports = {
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   externals: {
-    // NProgress: 'NProgress',
-    // react: "React",
-    // "react-dom": "ReactDOM"
+    NProgress: 'NProgress',
+    react: "React",
+    "react-dom": "ReactDOM"
   },
     //设置开发者工具的端口号,不设置则默认为8080端口
-  devServer: {
-    proxy: {
-        '/api': {
-            target: 'http://localhost:3333',
-            changeOrigin: true,
-            pathRewrite: {
-              '^/api': ''
-            }
-        }
-    }
-  },
+  // devServer: {
+  //   proxy: {
+  //       '/api': {
+  //           target: 'http://192.168.1.189:3033',
+  //           changeOrigin: true,
+  //           pathRewrite: {
+  //             '^/api': ''
+  //           },
+  //       },
+  //       '/login': {
+  //         target: 'http://192.168.1.96:51002',
+  //         changeOrigin: true,
+  //         pathRewrite: {
+  //           '^/login': ''
+  //         }
+  //     }
+  //   }
+  // },
   optimization: {
     // Automatically split vendor and commons
     // https://twitter.com/wSokra/status/969633336732905474

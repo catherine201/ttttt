@@ -63,7 +63,11 @@ module.exports = {
     'no-return-assign': 0,
     'no-loop-func': 0,
     'no-shadow': 0,
-    'react/no-string-refs': 0
+    'react/no-string-refs': 0,
+    'no-useless-escape': 0,
+    'no-underscore-dangle': 0,
+    'no-extend-native': 0,
+    'no-case-declarations': 0
   },
   "plugins": [
     "react",

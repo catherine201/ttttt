@@ -27,30 +27,35 @@ function generateMenu(props, menus) {
 export default class Asider extends React.Component {
   state = {
     menu: [
+      // {
+      //   key: '',
+      //   path: '/personalCenter/',
+      //   text: '个人信息'
+      // },
+      // {
+      //   key: 'changePassword',
+      //   path: '/personalCenter/changePassword',
+      //   text: '变更密码'
+      // },
+      // {
+      //   key: 'binding',
+      //   path: '/personalCenter/binding',
+      //   text: '绑定'
+      // },
+      // {
+      //   key: 'safetyCheck',
+      //   path: '/personalCenter/safetyCheck',
+      //   text: '安全验证'
+      // },
+      // {
+      //   key: 'console',
+      //   path: '/personalCenter/console',
+      //   text: '控制台'
+      // },
       {
-        key: '',
-        path: '/personalCenter/',
-        text: '个人信息'
-      },
-      {
-        key: 'changePassword',
-        path: '/personalCenter/changePassword',
-        text: '变更密码'
-      },
-      {
-        key: 'binding',
-        path: '/personalCenter/binding',
-        text: '绑定'
-      },
-      {
-        key: 'safetyCheck',
-        path: '/personalCenter/safetyCheck',
-        text: '安全验证'
-      },
-      {
-        key: 'console',
-        path: '/personalCenter/console',
-        text: '控制台'
+        key: 'user',
+        path: '/personalCenter/user',
+        text: '用户管理'
       },
       {
         key: 'group',

@@ -10,21 +10,14 @@ const srcImg = require('../../assets/images/logo.png');
 class RegistrationForm extends React.Component {
   state = {
     confirmDirty: false
-    // isLoding: false
   };
 
   register = async obj => {
     const res = await createApi.register(obj);
     if (res && res.error_code === 1) {
-      // this.setState({
-      //   isLoding: false
-      // });
       this.$msg.success('注册成功');
       this.props.history.push('/login');
     } else {
-      // this.setState({
-      //   isLoding: false
-      // });
       this.$msg.success('注册失败');
     }
   };
@@ -33,25 +26,12 @@ class RegistrationForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        // this.setState({
-        //   isLoding: true
-        // });
         const obj = {
           name: values.user,
           password: values.password,
           confirm_pwd: values.confirm
         };
         this.register(obj);
-        // this.$msg.loading('正在注册...', 2, () => {
-        //   this.$msg.success('注册成功');
-        //   setTimeout(() => {
-        //     this.setState({
-        //       isLoding: false
-        //     });
-        //     this.props.history.push('/login');
-        //   }, 500);
-        // });
       }
     });
   };
@@ -75,11 +55,11 @@ class RegistrationForm extends React.Component {
     if (value && this.state.confirmDirty) {
       form.validateFields(['confirm'], { force: true });
     }
-    const reg = /(?![0-9A-Z]+$)(?![0-9a-z]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$/; // 密码至少为8位的数字和大小写字母的组合
+    const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
     if (value && reg.test(value)) {
       callback();
     } else {
-      callback('密码至少为8位的数字和大小写字母的组合!');
+      callback('密码至少为8位的字母,数字,字符任意两种的组合!');
     }
   };
 
@@ -134,7 +114,7 @@ class RegistrationForm extends React.Component {
             className="text-center"
             style={{ color: '#1890FF', fontSize: 'rgba(24, 144, 255, 0.91)' }}
           >
-            EUEN ADMIN
+            Leeker Labs
           </h1>
           <Form onSubmit={this.handleSubmit} className={styles['ant-form']}>
             <FormItem {...formItemLayout} label="用户名">
@@ -190,7 +170,7 @@ class RegistrationForm extends React.Component {
           </Form>
 
           <div style={{ color: '#9fa8b1' }} className="text-center">
-            Euen admin platform
+            Leeker Labs platform
           </div>
         </div>
       </div>
