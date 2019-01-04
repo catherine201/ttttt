@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Input, Button, Icon, Divider, Modal } from 'antd';
-import Highlighter from 'react-highlight-words';
+// import Highlighter from 'react-highlight-words';
 import { connect } from 'react-redux';
 import AddEditMenu from './addEditMenu';
 import styles from './index.less';
@@ -13,7 +13,7 @@ class Console extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: '', // table里面的search
+      // searchText: '', // table里面的search
       menuNameInput: '', // 头部的查询
       menuAddrInput: '',
       pagination: {
@@ -67,7 +67,14 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: [],
+        pagination: {}
+      });
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 
@@ -82,7 +89,13 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 
@@ -96,7 +109,13 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 
@@ -111,15 +130,15 @@ class Console extends React.Component {
     }
   };
 
-  handleSearch = (selectedKeys, confirm) => {
-    confirm();
-    this.setState({ searchText: selectedKeys[0] });
-  };
+  // handleSearch = (selectedKeys, confirm) => {
+  //   confirm();
+  //   this.setState({ searchText: selectedKeys[0] });
+  // };
 
-  handleReset = clearFilters => {
-    clearFilters();
-    this.setState({ searchText: '' });
-  };
+  // handleReset = clearFilters => {
+  //   clearFilters();
+  //   this.setState({ searchText: '' });
+  // };
 
   handleTableChange = pagination => {
     // console.log(pagination);
@@ -135,66 +154,66 @@ class Console extends React.Component {
     });
   };
 
-  getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters
-    }) => (
-      <div className="custom-filter-dropdown">
-        <Input
-          ref={node => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleReset(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-        searchWords={[this.state.searchText]}
-        autoEscape
-        textToHighlight={text.toString()}
-      />
-    )
-  });
+  // getColumnSearchProps = dataIndex => ({
+  //   filterDropdown: ({
+  //     setSelectedKeys,
+  //     selectedKeys,
+  //     confirm,
+  //     clearFilters
+  //   }) => (
+  //     <div className="custom-filter-dropdown">
+  //       <Input
+  //         ref={node => {
+  //           this.searchInput = node;
+  //         }}
+  //         placeholder={`Search ${dataIndex}`}
+  //         value={selectedKeys[0]}
+  //         onChange={e =>
+  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
+  //         }
+  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
+  //       />
+  //       <Button
+  //         type="primary"
+  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
+  //         icon="search"
+  //         size="small"
+  //         style={{ width: 90, marginRight: 8 }}
+  //       >
+  //         Search
+  //       </Button>
+  //       <Button
+  //         onClick={() => this.handleReset(clearFilters)}
+  //         size="small"
+  //         style={{ width: 90 }}
+  //       >
+  //         Reset
+  //       </Button>
+  //     </div>
+  //   ),
+  //   filterIcon: filtered => (
+  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+  //   ),
+  //   onFilter: (value, record) =>
+  //     record[dataIndex]
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase()),
+  //   onFilterDropdownVisibleChange: visible => {
+  //     if (visible) {
+  //       setTimeout(() => this.searchInput.select());
+  //     }
+  //   },
+  //   render: text => (
+  //     <Highlighter
+  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+  //       searchWords={[this.state.searchText]}
+  //       autoEscape
+  //       textToHighlight={text.toString()}
+  //     />
+  //   )
+  // });
 
   changeMenuName = e => {
     this.setState({
@@ -348,33 +367,33 @@ class Console extends React.Component {
       {
         title: '名称',
         dataIndex: 'name',
-        key: 'name',
+        key: 'name'
         // width: '20%',
-        ...this.getColumnSearchProps('name')
+        // ...this.getColumnSearchProps('name')
       },
       {
         title: '描述',
         dataIndex: 'remark',
-        key: 'remark',
-        ...this.getColumnSearchProps('remark')
+        key: 'remark'
+        // ...this.getColumnSearchProps('remark')
       },
       {
         title: '排序',
         dataIndex: 'sort',
-        key: 'sort',
-        ...this.getColumnSearchProps('sort')
+        key: 'sort'
+        // ...this.getColumnSearchProps('sort')
       },
       {
         title: '跳转地址',
         dataIndex: 'target',
-        key: 'target',
-        ...this.getColumnSearchProps('target')
+        key: 'target'
+        // ...this.getColumnSearchProps('target')
       },
       {
         title: '图标地址',
         dataIndex: 'icon_url',
-        key: 'icon_url',
-        ...this.getColumnSearchProps('icon_url')
+        key: 'icon_url'
+        // ...this.getColumnSearchProps('icon_url')
       },
       // {
       //   title: '父菜单id',
@@ -449,7 +468,7 @@ class Console extends React.Component {
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
-              : initMenus.paging
+              : { ...initMenus.paging, defaultCurrent: 1, defaultPageSize: 6 }
           }
           onChange={this.handleTableChange}
           rowKey={record => {
@@ -487,7 +506,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getInitMenu: dispatch.query.getInitMenu
+  getInitMenu: dispatch.query.getInitMenu,
+  getMenu: dispatch.menu.getMenu,
+  getOwnMenu: dispatch.menu.getOwnMenu
 });
 export default connect(
   mapStateToProps,

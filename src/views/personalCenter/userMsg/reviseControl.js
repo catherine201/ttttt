@@ -121,25 +121,27 @@ class ResiveControl extends React.Component {
           {tags &&
             tags.map(tag => {
               const ind = groupArr.findIndex(item => item._id === tag);
-              const tagName = groupArr[ind].name;
-              const isLongTag = tagName.length > 20;
-              // const isLongTag = tag.length > 20;
-              const tagElem = (
-                <Tag
-                  key={tag}
-                  closable
-                  afterClose={() => this.handleClose(tag)}
-                >
-                  {isLongTag ? `${tagName.slice(0, 20)}...` : tagName}
-                </Tag>
-              );
-              return isLongTag ? (
-                <Tooltip title={tagName} key={tag}>
-                  {tagElem}
-                </Tooltip>
-              ) : (
-                tagElem
-              );
+              if (ind !== -1) {
+                const tagName = groupArr[ind].name;
+                const isLongTag = tagName.length > 20;
+                // const isLongTag = tag.length > 20;
+                const tagElem = (
+                  <Tag
+                    key={tag}
+                    closable
+                    afterClose={() => this.handleClose(tag)}
+                  >
+                    {isLongTag ? `${tagName.slice(0, 20)}...` : tagName}
+                  </Tag>
+                );
+                return isLongTag ? (
+                  <Tooltip title={tagName} key={tag}>
+                    {tagElem}
+                  </Tooltip>
+                ) : (
+                  tagElem
+                );
+              }
             })}
         </div>
       </div>
