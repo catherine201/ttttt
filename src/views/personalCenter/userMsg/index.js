@@ -62,7 +62,6 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
-      this.props.getInitUser();
       console.log(this.state.data);
     }
   };
@@ -177,6 +176,7 @@ class Console extends React.Component {
           : 0
       };
       this.queryUser(obj);
+      this.props.getInitUser();
     }
   };
 

@@ -53,9 +53,6 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
-      this.props.getInitMenu();
-      this.props.getMenu();
-      this.props.getOwnMenu();
       // console.log(pagination.total);
     }
   };
@@ -71,6 +68,9 @@ class Console extends React.Component {
           : 0
       };
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 
@@ -86,6 +86,9 @@ class Console extends React.Component {
           : 0
       };
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 
@@ -100,6 +103,9 @@ class Console extends React.Component {
           : 0
       };
       this.queryMenus(obj);
+      this.props.getInitMenu();
+      this.props.getMenu();
+      this.props.getOwnMenu();
     }
   };
 

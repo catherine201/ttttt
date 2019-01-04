@@ -58,8 +58,6 @@ class Console extends React.Component {
         pagination,
         data: res.datas
       });
-      this.props.getInitGroup();
-      this.props.getGroup();
     }
   };
 
@@ -203,6 +201,8 @@ class Console extends React.Component {
           : 0
       };
       this.queryTeams(obj);
+      this.props.getInitGroup();
+      this.props.getGroup();
     }
   };
 
@@ -245,6 +245,8 @@ class Console extends React.Component {
           : 0
       };
       this.queryTeams(obj);
+      this.props.getInitGroup();
+      this.props.getGroup();
     }
   };
 
@@ -258,6 +260,8 @@ class Console extends React.Component {
           : 0
       };
       this.queryTeams(obj);
+      this.props.getInitGroup();
+      this.props.getGroup();
     }
   };
 
