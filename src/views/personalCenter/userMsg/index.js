@@ -175,7 +175,11 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryUser(obj);
+      this.props.getOwnMenu();
       this.props.getInitUser();
     }
   };
@@ -331,7 +335,7 @@ class Console extends React.Component {
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
-              : initUser.paging
+              : { ...initUser.paging, defaultCurrent: 1, defaultPageSize: 6 }
           }
           onChange={this.handleTableChange}
           rowKey={record => {
@@ -366,7 +370,7 @@ const mapStateToProps = state => ({
   initUser: state.query.initUser
 });
 const mapDispatchToProps = dispatch => ({
-  // getMenu: dispatch.menu.getMenu,
+  getOwnMenu: dispatch.menu.getOwnMenu,
   getGroup: dispatch.menu.getGroup,
   getInitUser: dispatch.query.getInitUser
   // getInitGroup: dispatch.query.getInitGroup

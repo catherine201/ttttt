@@ -28,12 +28,10 @@ class AddEditMenu extends React.Component {
 
   validateUrl = (rule, value, callback) => {
     const reg = /^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/i; // 密码至少为8位的字母,数字,字符任意两种的组合
-    if (value && reg.test(value)) {
-      callback();
-    } else if (value && !reg.test(value)) {
-      callback('输入地址不符合规则!');
+    if (value && !reg.test(value)) {
+      callback('地址不符合规范');
     } else {
-      callback('请输入地址');
+      callback();
     }
   };
 
@@ -91,7 +89,7 @@ class AddEditMenu extends React.Component {
               <Form.Item label="跳转地址" {...formItemLayout}>
                 {getFieldDecorator('target', {
                   rules: [
-                    // { required: true, message: '请输入跳转地址!' },
+                    { required: true, message: '请输入跳转地址!' },
                     { max: 128, message: '最多128位!' },
                     {
                       validator: this.validateUrl

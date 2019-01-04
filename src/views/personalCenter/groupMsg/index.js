@@ -200,7 +200,11 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryTeams(obj);
+      this.props.getOwnMenu();
       this.props.getInitGroup();
       this.props.getGroup();
     }
@@ -244,7 +248,11 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryTeams(obj);
+      this.props.getOwnMenu();
       this.props.getInitGroup();
       this.props.getGroup();
     }
@@ -259,7 +267,11 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryTeams(obj);
+      this.props.getOwnMenu();
       this.props.getInitGroup();
       this.props.getGroup();
     }
@@ -491,7 +503,7 @@ class Console extends React.Component {
             pagination={
               this.state.pagination.total !== undefined
                 ? this.state.pagination
-                : initGroup.paging
+                : { ...initGroup.paging, defaultCurrent: 1, defaultPageSize: 6 }
             }
             onChange={this.handleTableChange}
             rowKey={record => {
@@ -539,6 +551,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getMenu: dispatch.menu.getMenu,
+  getOwnMenu: dispatch.menu.getOwnMenu,
   getInitGroup: dispatch.query.getInitGroup,
   getGroup: dispatch.menu.getGroup
 });

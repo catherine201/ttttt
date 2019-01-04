@@ -67,6 +67,10 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: [],
+        pagination: {}
+      });
       this.queryMenus(obj);
       this.props.getInitMenu();
       this.props.getMenu();
@@ -85,6 +89,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryMenus(obj);
       this.props.getInitMenu();
       this.props.getMenu();
@@ -102,6 +109,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
+      this.setState({
+        data: []
+      });
       this.queryMenus(obj);
       this.props.getInitMenu();
       this.props.getMenu();
@@ -458,7 +468,7 @@ class Console extends React.Component {
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
-              : initMenus.paging
+              : { ...initMenus.paging, defaultCurrent: 1, defaultPageSize: 6 }
           }
           onChange={this.handleTableChange}
           rowKey={record => {
