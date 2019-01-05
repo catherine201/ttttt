@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Icon } from 'antd';
 import createApi from '../../api/registerAndLogin';
 import styles from './register.less';
 
@@ -56,10 +56,10 @@ class RegistrationForm extends React.Component {
       form.validateFields(['confirm'], { force: true });
     }
     const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
-    if (value && reg.test(value)) {
-      callback();
-    } else {
+    if (value && !reg.test(value)) {
       callback('密码至少为8位的字母,数字,字符任意两种的组合!');
+    } else {
+      callback();
     }
   };
 
@@ -71,28 +71,28 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 16,
-          offset: 8
-        }
-      }
-    };
+    // const formItemLayout = {
+    //   labelCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 8 }
+    //   },
+    //   wrapperCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 16 }
+    //   }
+    // };
+    // const tailFormItemLayout = {
+    //   wrapperCol: {
+    //     xs: {
+    //       span: 24,
+    //       offset: 0
+    //     },
+    //     sm: {
+    //       span: 16,
+    //       offset: 8
+    //     }
+    //   }
+    // };
     return (
       <div className="middle-box">
         <div
@@ -117,7 +117,8 @@ class RegistrationForm extends React.Component {
             Leeker Labs
           </h1>
           <Form onSubmit={this.handleSubmit} className={styles['ant-form']}>
-            <FormItem {...formItemLayout} label="用户名">
+            {/* label="用户名"  {...formItemLayout} */}
+            <FormItem>
               {getFieldDecorator('user', {
                 rules: [
                   {
@@ -125,9 +126,18 @@ class RegistrationForm extends React.Component {
                     message: '请输入用户名!'
                   }
                 ]
-              })(<Input />)}
+              })(
+                <Input
+                  size="large"
+                  prefix={
+                    <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
+                  }
+                  placeholder="账号"
+                />
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label="密码">
+            {/* {...formItemLayout} label="密码" */}
+            <FormItem>
               {getFieldDecorator('password', {
                 rules: [
                   {
@@ -138,9 +148,19 @@ class RegistrationForm extends React.Component {
                     validator: this.validateToNextPassword
                   }
                 ]
-              })(<Input type="password" />)}
+              })(
+                <Input
+                  size="large"
+                  prefix={
+                    <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                  }
+                  type="password"
+                  placeholder="密码"
+                />
+              )}
             </FormItem>
-            <FormItem {...formItemLayout} label="密码确认">
+            {/* {...formItemLayout} label="密码确认" */}
+            <FormItem>
               {getFieldDecorator('confirm', {
                 rules: [
                   {
@@ -151,13 +171,25 @@ class RegistrationForm extends React.Component {
                     validator: this.compareToFirstPassword
                   }
                 ]
-              })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+              })(
+                <Input
+                  size="large"
+                  prefix={
+                    <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
+                  }
+                  type="password"
+                  placeholder="密码确认"
+                  onBlur={this.handleConfirmBlur}
+                />
+              )}
             </FormItem>
-            <FormItem {...tailFormItemLayout}>
+            {/* {...tailFormItemLayout} */}
+            <FormItem>
               <Button
                 type="primary"
                 htmlType="submit"
-                className={styles['login-form-button']}
+                className="btn-block btn-lg"
+                // className={styles['login-form-button']}
                 disabled={this.state.isLoding}
               >
                 Register
