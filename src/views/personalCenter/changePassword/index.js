@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Input, Button, Divider } from 'antd';
+import createApi from '../../../api/info';
 import styles from './changePassword.less';
+import { regular } from '../../../utils/validate';
 
 const FormItem = Form.Item;
 
@@ -9,17 +11,32 @@ class RegistrationForm extends React.Component {
     confirmDirty: false
   };
 
+  revisePassWord = async obj => {
+    const res = await createApi.reviseUserInfo(obj);
+    if (res && res.error_code === 1) {
+      this.$msg.success('更改密码成功');
+      this.props.history.push('/login');
+    } else {
+      this.$msg.success('更改密码失败');
+    }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.$msg.loading('正在注册...', 2, () => {
-          this.$msg.success('注册成功');
-          setTimeout(() => {
-            this.props.history.push('/login');
-          }, 500);
-        });
+        const obj = {
+          url: `${JSON.parse(sessionStorage.getItem('user')).openid}/password`,
+          query: {
+            access_token: JSON.parse(sessionStorage.getItem('user'))
+              .access_token,
+            old_password: values.oldPassword,
+            new_password: values.newPassword,
+            confirm_password: values.confirm
+          }
+        };
+        this.revisePassWord(obj);
       }
     });
   };
@@ -43,7 +60,19 @@ class RegistrationForm extends React.Component {
     if (value && this.state.confirmDirty) {
       form.validateFields(['confirm'], { force: true });
     }
-    callback();
+    if (value && !regular.passWord.test(value)) {
+      callback('密码至少为8位的字母,数字,字符任意两种的组合!');
+    } else {
+      callback();
+    }
+  };
+
+  validateToOldPassword = (rule, value, callback) => {
+    if (value && !regular.passWord.test(value)) {
+      callback('密码至少为8位的字母,数字,字符任意两种的组合!');
+    } else {
+      callback();
+    }
   };
 
   toLogin = e => {
@@ -87,9 +116,12 @@ class RegistrationForm extends React.Component {
                 {
                   required: true,
                   message: '请输入旧密码!'
+                },
+                {
+                  validator: this.validateToOldPassword
                 }
               ]
-            })(<Input className={styles['ant-input']} />)}
+            })(<Input className={styles['ant-input']} type="password" />)}
           </FormItem>
           <FormItem {...formItemLayout} label="新密码">
             {getFieldDecorator('newPassword', {

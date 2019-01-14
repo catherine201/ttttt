@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './login.less';
 import createApi from '../../api/registerAndLogin';
+import { regular } from '../../utils/validate';
 
 const srcImg = require('../../assets/images/logo.png');
 
@@ -29,20 +30,28 @@ class Login extends React.Component {
   login = async obj => {
     const res = await createApi.login(obj);
     if (res && res.error_code === 1) {
-      const userObj = res.data;
-      const info = {
+      const authObj = {
         access_token: res.data.access_token,
-        open_id: res.data.openid
+        appid: 'd862b911825b21d72275420ae4456b80'
       };
-      const result = await createApi.secondLogin(info);
-      if (result) {
-        this.props.dispatch.menu.getOwnMenu();
-        userObj.second_access_token = result.access_token;
-        userObj._id = result.user_id;
-        sessionStorage.setItem('user', JSON.stringify(userObj));
-        this.props.history.push('/personalCenter/user');
-      } else {
-        this.$msg.error('登陆失败');
+      const authResult = await createApi.authLogin(authObj);
+      if (authResult) {
+        const userObj = res.data;
+        const info = {
+          auth_code: authResult.data.auth_code,
+          open_id: res.data.openid
+        };
+        const result = await createApi.secondLogin(info);
+        if (result) {
+          this.props.dispatch.menu.getOwnMenu();
+          userObj.second_access_token = result.access_token;
+          userObj._id = result.user_id;
+          userObj.auth_code = authResult.data.auth_code;
+          sessionStorage.setItem('user', JSON.stringify(userObj));
+          this.props.history.push('/personalCenter/user');
+        } else {
+          this.$msg.error('登陆失败');
+        }
       }
     } else {
       this.$msg.error(res.message);
@@ -63,8 +72,8 @@ class Login extends React.Component {
   };
 
   validateToPassword = (rule, value, callback) => {
-    const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
-    if (value && reg.test(value)) {
+    // const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
+    if (value && regular.passWord.test(value)) {
       callback();
     } else {
       callback('密码至少为8位的字母,数字,字符任意两种的组合!');

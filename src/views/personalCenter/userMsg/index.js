@@ -36,12 +36,12 @@ class Console extends React.Component {
     //   offset: 0
     // };
     // this.queryUser(obj);
-    !this.props.groupArr.length ? this.props.getGroup() : false;
+    !this.props.groupArr.length && this.props.getGroup();
     // console.log(this.props);
     // const pagination = { ...this.state.pagination };
     // pagination.total = res.paging.total;
     // console.log(res.paging.total);
-    !this.props.initUser.datas ? this.props.getInitUser() : false;
+    !this.props.initUser.datas && this.props.getInitUser();
     // pagination.total =
     //   this.props.initUser.paging && this.props.initUser.paging.total;
     // this.setState({
@@ -66,6 +66,15 @@ class Console extends React.Component {
     }
   };
 
+  searchByName = () => {
+    const obj = {
+      keyword: this.state.userNameInput,
+      auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+      open_id: JSON.parse(sessionStorage.getItem('user')).openid
+    };
+    this.state.userNameInput && this.queryUser(obj);
+  };
+
   // handleSearch = (selectedKeys, confirm) => {
   //   confirm();
   //   this.setState({ searchText: selectedKeys[0] });
@@ -80,7 +89,9 @@ class Console extends React.Component {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     const obj = {
-      access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+      open_id: JSON.parse(sessionStorage.getItem('user')).openid,
       limit: 6,
       offset: (pagination.current - 1) * this.state.limit
     };
@@ -169,7 +180,9 @@ class Console extends React.Component {
         showModal: 0
       });
       const obj = {
-        access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+        open_id: JSON.parse(sessionStorage.getItem('user')).openid,
         limit: this.state.limit,
         offset: this.state.pagination.current
           ? (this.state.pagination.current - 1) * this.state.limit
@@ -311,12 +324,16 @@ class Console extends React.Component {
               placeholder="请输入用户名称"
               value={this.state.userNameInput}
               onChange={e => this.changeUserName(e)}
-              onPressEnter={() => this.searchUserInfo()}
+              onPressEnter={() => this.searchByName()}
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={nameSuffix}
               ref={node => (this.userNameInput = node)}
             />
-            <Button type="primary" icon="search">
+            <Button
+              type="primary"
+              icon="search"
+              onClick={() => this.searchByName()}
+            >
               查询
             </Button>
           </div>

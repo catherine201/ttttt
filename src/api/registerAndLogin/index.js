@@ -22,6 +22,13 @@ const config = {
       baseUrl: serverIp.login
     }
   },
+  authLogin: {
+    url: '/api/tokens/auth_code',
+    method: 'get',
+    options: {
+      baseUrl: serverIp.login
+    }
+  },
   // 最终登录
   secondLogin: {
     url: '/login',

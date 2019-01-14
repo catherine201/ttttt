@@ -60,7 +60,7 @@ class AppHeader extends React.Component {
   dropdownMenu() {
     return (
       <Menu>
-        {/* <Menu.Item key="0" onClick={() => this.toHref('/personalCenter/')}>
+        <Menu.Item key="0" onClick={() => this.toHref('/personalCenter/')}>
           <Icon type="user" style={{ marginRight: '5px' }} />
           个人信息
         </Menu.Item>
@@ -91,7 +91,7 @@ class AppHeader extends React.Component {
         >
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           控制台
-        </Menu.Item> */}
+        </Menu.Item>
         <Menu.Item key="5" onClick={() => this.toHref('/personalCenter/user')}>
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           用户管理

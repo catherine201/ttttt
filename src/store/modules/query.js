@@ -56,7 +56,9 @@ const asideState = {
       //   }
       // };
       const obj = {
-        access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+        open_id: JSON.parse(sessionStorage.getItem('user')).openid,
         limit: 6,
         offset: 0
       };

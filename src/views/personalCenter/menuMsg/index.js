@@ -15,7 +15,7 @@ class Console extends React.Component {
     this.state = {
       // searchText: '', // table里面的search
       menuNameInput: '', // 头部的查询
-      menuAddrInput: '',
+      // menuAddrInput: '',
       pagination: {
         defaultCurrent: 1,
         defaultPageSize: 6
@@ -28,7 +28,7 @@ class Console extends React.Component {
   }
 
   componentDidMount() {
-    !this.props.initMenus.datas ? this.props.getInitMenu() : false;
+    !this.props.initMenus.datas && this.props.getInitMenu();
     // const pagination = { ...this.state.pagination };
     // pagination.total = 20;
     // this.setState({
@@ -55,6 +55,13 @@ class Console extends React.Component {
       });
       // console.log(pagination.total);
     }
+  };
+
+  searchByName = () => {
+    const obj = {
+      keyword: this.state.menuNameInput
+    };
+    this.state.menuNameInput && this.queryMenus(obj);
   };
 
   addMenu = async obj => {
@@ -221,21 +228,21 @@ class Console extends React.Component {
     });
   };
 
-  changeAddr = e => {
-    this.setState({
-      menuAddrInput: e.target.value
-    });
-  };
+  // changeAddr = e => {
+  //   this.setState({
+  //     menuAddrInput: e.target.value
+  //   });
+  // };
 
   emitEmptyName = () => {
     this.menuNameInput.focus();
     this.setState({ menuNameInput: '' });
   };
 
-  emitEmptyAddr = () => {
-    this.menuAddrInput.focus();
-    this.setState({ menuAddrInput: '' });
-  };
+  // emitEmptyAddr = () => {
+  //   this.menuAddrInput.focus();
+  //   this.setState({ menuAddrInput: '' });
+  // };
 
   handleOk = e => {
     console.log(e);
@@ -360,9 +367,9 @@ class Console extends React.Component {
     const nameSuffix = this.state.menuNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
-    const addrSuffix = this.state.menuAddrInput ? (
-      <Icon type="close-circle" onClick={this.emitEmptyAddr} />
-    ) : null;
+    // const addrSuffix = this.state.menuAddrInput ? (
+    //   <Icon type="close-circle" onClick={this.emitEmptyAddr} />
+    // ) : null;
     const columns = [
       {
         title: '名称',
@@ -431,12 +438,12 @@ class Console extends React.Component {
               placeholder="请输入菜单名称"
               value={this.state.menuNameInput}
               onChange={e => this.changeMenuName(e)}
-              onPressEnter={() => this.searchMenuInfo()}
+              onPressEnter={() => this.searchByName()}
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={nameSuffix}
               ref={node => (this.menuNameInput = node)}
             />
-            <Input
+            {/* <Input
               placeholder="请输入跳转地址"
               value={this.state.menuAddrInput}
               onChange={e => this.changeAddr(e)}
@@ -444,8 +451,12 @@ class Console extends React.Component {
               prefix={<Icon type="edit" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={addrSuffix}
               ref={node => (this.menuAddrInput = node)}
-            />
-            <Button type="primary" icon="search">
+            /> */}
+            <Button
+              type="primary"
+              icon="search"
+              onClick={() => this.searchByName()}
+            >
               查询
             </Button>
           </div>
