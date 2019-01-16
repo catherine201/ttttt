@@ -24,7 +24,8 @@ class Console extends React.Component {
       originalSendData: {}, // 发送给编辑组件的最初值
       editSendData: {}, // 发送给修改权限组件的值
       limit: 6, // 一页多少个项
-      editId: ''
+      editId: '',
+      flag: false // 是否是查询结果
     };
     this.handleEdit = this.handleEdit.bind(this);
   }
@@ -60,7 +61,8 @@ class Console extends React.Component {
       pagination.total = res.paging.total;
       this.setState({
         pagination,
-        data: res.datas
+        data: res.datas,
+        flag: true
       });
       console.log(this.state.data);
     }
@@ -100,67 +102,6 @@ class Console extends React.Component {
       pagination: pager
     });
   };
-
-  // getColumnSearchProps = dataIndex => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters
-  //   }) => (
-  //     <div className="custom-filter-dropdown">
-  //       <Input
-  //         ref={node => {
-  //           this.searchInput = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e =>
-  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
-  //         }
-  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
-  //         icon="search"
-  //         size="small"
-  //         style={{ width: 90, marginRight: 8 }}
-  //       >
-  //         Search
-  //       </Button>
-  //       <Button
-  //         onClick={() => this.handleReset(clearFilters)}
-  //         size="small"
-  //         style={{ width: 90 }}
-  //       >
-  //         Reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: filtered => (
-  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: visible => {
-  //     if (visible) {
-  //       setTimeout(() => this.searchInput.select());
-  //     }
-  //   },
-  //   render: text => (
-  //     <Highlighter
-  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //       searchWords={[this.state.searchText]}
-  //       autoEscape
-  //       textToHighlight={text.toString()}
-  //     />
-  //   )
-  // });
 
   changeUserName = e => {
     this.setState({
@@ -239,7 +180,7 @@ class Console extends React.Component {
 
   render() {
     const { groupArr, initUser } = this.props;
-    const { editSendData } = this.state;
+    const { editSendData, flag } = this.state;
     const nameSuffix = this.state.userNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -348,7 +289,13 @@ class Console extends React.Component {
 
         <Table
           columns={columns}
-          dataSource={this.state.data.length ? this.state.data : initUser.datas}
+          dataSource={
+            this.state.data.length
+              ? this.state.data
+              : flag
+              ? this.state.data
+              : initUser.datas
+          }
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
