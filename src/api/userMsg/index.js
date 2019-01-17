@@ -1,4 +1,5 @@
 import createApi from '../createApi';
+import { serverIp } from '../server_config';
 
 const config = {
   // 查询用户列表  获取用户对应菜单
@@ -17,6 +18,13 @@ const config = {
     options: {
       errorHandler: true,
       showLoading: true
+    }
+  },
+  authLogin: {
+    url: '/api/tokens/auth_code',
+    method: 'get',
+    options: {
+      baseUrl: serverIp.login
     }
   }
 };

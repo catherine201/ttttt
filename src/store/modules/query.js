@@ -44,6 +44,7 @@ const asideState = {
       if (res) {
         console.log(res.datas);
         console.log(dispatch);
+        res.init = true;
         dispatch.query.setMenu(res);
       }
     },
@@ -55,8 +56,15 @@ const asideState = {
       //     offset: 0
       //   }
       // };
-      const obj = {
+      const authObj = {
         access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        appid: 'd862b911825b21d72275420ae4456b80'
+      };
+      const authResult = await createApi.authLogin(authObj);
+      const obj = {
+        // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        auth_code: authResult.data.auth_code,
+        open_id: JSON.parse(sessionStorage.getItem('user')).openid,
         limit: 6,
         offset: 0
       };
@@ -64,6 +72,7 @@ const asideState = {
       if (res) {
         console.log(res.datas);
         console.log(dispatch);
+        res.init = true;
         dispatch.query.setUser(res);
       }
     },
@@ -72,6 +81,7 @@ const asideState = {
       if (res) {
         console.log(res.datas);
         console.log(dispatch);
+        res.init = true;
         dispatch.query.setGroup(res);
       }
     }

@@ -24,7 +24,8 @@ class Console extends React.Component {
       originalSendData: {}, // 发送给编辑组件的最初值
       editSendData: {}, // 发送给修改权限组件的值
       limit: 6, // 一页多少个项
-      editId: ''
+      editId: '',
+      searchFlag: false
     };
     this.handleEdit = this.handleEdit.bind(this);
   }
@@ -36,12 +37,12 @@ class Console extends React.Component {
     //   offset: 0
     // };
     // this.queryUser(obj);
-    !this.props.groupArr.length ? this.props.getGroup() : false;
+    !this.props.groupArr.length && this.props.getGroup();
     // console.log(this.props);
     // const pagination = { ...this.state.pagination };
     // pagination.total = res.paging.total;
     // console.log(res.paging.total);
-    !this.props.initUser.datas ? this.props.getInitUser() : false;
+    !this.props.initUser.init && this.props.getInitUser();
     // pagination.total =
     //   this.props.initUser.paging && this.props.initUser.paging.total;
     // this.setState({
@@ -51,6 +52,12 @@ class Console extends React.Component {
   }
 
   queryUser = async obj => {
+    const authObj = {
+      access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      appid: 'd862b911825b21d72275420ae4456b80'
+    };
+    const authResult = await createApi.authLogin(authObj);
+    obj.auth_code = authResult.data.auth_code;
     const res = await createApi.queryUser(obj);
     if (res) {
       // console.log(res);
@@ -60,10 +67,21 @@ class Console extends React.Component {
       pagination.total = res.paging.total;
       this.setState({
         pagination,
-        data: res.datas
+        data: res.datas,
+        searchFlag: true
       });
       console.log(this.state.data);
     }
+  };
+
+  searchByName = () => {
+    const obj = {
+      keyword: this.state.userNameInput,
+      auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+      open_id: JSON.parse(sessionStorage.getItem('user')).openid
+    };
+    // this.state.userNameInput &&
+    this.queryUser(obj);
   };
 
   // handleSearch = (selectedKeys, confirm) => {
@@ -80,7 +98,9 @@ class Console extends React.Component {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     const obj = {
-      access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+      open_id: JSON.parse(sessionStorage.getItem('user')).openid,
       limit: 6,
       offset: (pagination.current - 1) * this.state.limit
     };
@@ -89,67 +109,6 @@ class Console extends React.Component {
       pagination: pager
     });
   };
-
-  // getColumnSearchProps = dataIndex => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters
-  //   }) => (
-  //     <div className="custom-filter-dropdown">
-  //       <Input
-  //         ref={node => {
-  //           this.searchInput = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e =>
-  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
-  //         }
-  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
-  //         icon="search"
-  //         size="small"
-  //         style={{ width: 90, marginRight: 8 }}
-  //       >
-  //         Search
-  //       </Button>
-  //       <Button
-  //         onClick={() => this.handleReset(clearFilters)}
-  //         size="small"
-  //         style={{ width: 90 }}
-  //       >
-  //         Reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: filtered => (
-  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: visible => {
-  //     if (visible) {
-  //       setTimeout(() => this.searchInput.select());
-  //     }
-  //   },
-  //   render: text => (
-  //     <Highlighter
-  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //       searchWords={[this.state.searchText]}
-  //       autoEscape
-  //       textToHighlight={text.toString()}
-  //     />
-  //   )
-  // });
 
   changeUserName = e => {
     this.setState({
@@ -169,7 +128,9 @@ class Console extends React.Component {
         showModal: 0
       });
       const obj = {
-        access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+        auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
+        open_id: JSON.parse(sessionStorage.getItem('user')).openid,
         limit: this.state.limit,
         offset: this.state.pagination.current
           ? (this.state.pagination.current - 1) * this.state.limit
@@ -226,7 +187,7 @@ class Console extends React.Component {
 
   render() {
     const { groupArr, initUser } = this.props;
-    const { editSendData } = this.state;
+    const { editSendData, searchFlag } = this.state;
     const nameSuffix = this.state.userNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -311,12 +272,16 @@ class Console extends React.Component {
               placeholder="请输入用户名称"
               value={this.state.userNameInput}
               onChange={e => this.changeUserName(e)}
-              onPressEnter={() => this.searchUserInfo()}
+              onPressEnter={() => this.searchByName()}
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={nameSuffix}
               ref={node => (this.userNameInput = node)}
             />
-            <Button type="primary" icon="search">
+            <Button
+              type="primary"
+              icon="search"
+              onClick={() => this.searchByName()}
+            >
               查询
             </Button>
           </div>
@@ -331,7 +296,13 @@ class Console extends React.Component {
 
         <Table
           columns={columns}
-          dataSource={this.state.data.length ? this.state.data : initUser.datas}
+          dataSource={
+            this.state.data.length
+              ? this.state.data
+              : searchFlag
+              ? this.state.data
+              : initUser.datas
+          }
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination

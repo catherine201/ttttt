@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button, Icon } from 'antd';
 import createApi from '../../api/registerAndLogin';
 import styles from './register.less';
+import { regular } from '../../utils/validate';
 
 const FormItem = Form.Item;
 
@@ -55,8 +56,8 @@ class RegistrationForm extends React.Component {
     if (value && this.state.confirmDirty) {
       form.validateFields(['confirm'], { force: true });
     }
-    const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
-    if (value && !reg.test(value)) {
+    // const reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？])|(?=.*\d)(?=.*[\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]))[a-z\d\\+`~!@#%$^&*()=\-_|{}':;',\[\].<>\/?~！@#￥……&*（）——【】‘；：”“'。，、？]{8,16}/i; // 密码至少为8位的字母,数字,字符任意两种的组合
+    if (value && !regular.passWord.test(value)) {
       callback('密码至少为8位的字母,数字,字符任意两种的组合!');
     } else {
       callback();

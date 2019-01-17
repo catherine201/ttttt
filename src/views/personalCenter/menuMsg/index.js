@@ -15,7 +15,7 @@ class Console extends React.Component {
     this.state = {
       // searchText: '', // table里面的search
       menuNameInput: '', // 头部的查询
-      menuAddrInput: '',
+      // menuAddrInput: '',
       pagination: {
         defaultCurrent: 1,
         defaultPageSize: 6
@@ -23,12 +23,13 @@ class Console extends React.Component {
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增菜单  2 表示显示 编辑菜单
       data: [],
       sendData: {}, // 发送给新增编辑组件的值
-      limit: 6 // 一页多少个项
+      limit: 6, // 一页多少个项
+      searchFlag: false
     };
   }
 
   componentDidMount() {
-    !this.props.initMenus.datas ? this.props.getInitMenu() : false;
+    !this.props.initMenus.init && this.props.getInitMenu();
     // const pagination = { ...this.state.pagination };
     // pagination.total = 20;
     // this.setState({
@@ -51,10 +52,19 @@ class Console extends React.Component {
       pagination.total = res.paging.total;
       this.setState({
         pagination,
-        data: res.datas
+        data: res.datas,
+        searchFlag: true
       });
       // console.log(pagination.total);
     }
+  };
+
+  searchByName = () => {
+    const obj = {
+      keyword: this.state.menuNameInput
+    };
+    // this.state.menuNameInput &&
+    this.queryMenus(obj);
   };
 
   addMenu = async obj => {
@@ -154,88 +164,27 @@ class Console extends React.Component {
     });
   };
 
-  // getColumnSearchProps = dataIndex => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters
-  //   }) => (
-  //     <div className="custom-filter-dropdown">
-  //       <Input
-  //         ref={node => {
-  //           this.searchInput = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e =>
-  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
-  //         }
-  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
-  //         icon="search"
-  //         size="small"
-  //         style={{ width: 90, marginRight: 8 }}
-  //       >
-  //         Search
-  //       </Button>
-  //       <Button
-  //         onClick={() => this.handleReset(clearFilters)}
-  //         size="small"
-  //         style={{ width: 90 }}
-  //       >
-  //         Reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: filtered => (
-  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: visible => {
-  //     if (visible) {
-  //       setTimeout(() => this.searchInput.select());
-  //     }
-  //   },
-  //   render: text => (
-  //     <Highlighter
-  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //       searchWords={[this.state.searchText]}
-  //       autoEscape
-  //       textToHighlight={text.toString()}
-  //     />
-  //   )
-  // });
-
   changeMenuName = e => {
     this.setState({
       menuNameInput: e.target.value
     });
   };
 
-  changeAddr = e => {
-    this.setState({
-      menuAddrInput: e.target.value
-    });
-  };
+  // changeAddr = e => {
+  //   this.setState({
+  //     menuAddrInput: e.target.value
+  //   });
+  // };
 
   emitEmptyName = () => {
     this.menuNameInput.focus();
     this.setState({ menuNameInput: '' });
   };
 
-  emitEmptyAddr = () => {
-    this.menuAddrInput.focus();
-    this.setState({ menuAddrInput: '' });
-  };
+  // emitEmptyAddr = () => {
+  //   this.menuAddrInput.focus();
+  //   this.setState({ menuAddrInput: '' });
+  // };
 
   handleOk = e => {
     console.log(e);
@@ -360,9 +309,9 @@ class Console extends React.Component {
     const nameSuffix = this.state.menuNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
-    const addrSuffix = this.state.menuAddrInput ? (
-      <Icon type="close-circle" onClick={this.emitEmptyAddr} />
-    ) : null;
+    // const addrSuffix = this.state.menuAddrInput ? (
+    //   <Icon type="close-circle" onClick={this.emitEmptyAddr} />
+    // ) : null;
     const columns = [
       {
         title: '名称',
@@ -421,7 +370,7 @@ class Console extends React.Component {
         // ...this.getColumnSearchProps('address')
       }
     ];
-    const { sendData } = this.state;
+    const { sendData, searchFlag } = this.state;
     return (
       <div className={`menuMsg_wrapper ${styles.menuMsg_wrapper}`}>
         <div className={`query ${styles.query}`}>
@@ -431,12 +380,12 @@ class Console extends React.Component {
               placeholder="请输入菜单名称"
               value={this.state.menuNameInput}
               onChange={e => this.changeMenuName(e)}
-              onPressEnter={() => this.searchMenuInfo()}
+              onPressEnter={() => this.searchByName()}
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={nameSuffix}
               ref={node => (this.menuNameInput = node)}
             />
-            <Input
+            {/* <Input
               placeholder="请输入跳转地址"
               value={this.state.menuAddrInput}
               onChange={e => this.changeAddr(e)}
@@ -444,8 +393,12 @@ class Console extends React.Component {
               prefix={<Icon type="edit" style={{ color: 'rgba(0,0,0,.25)' }} />}
               suffix={addrSuffix}
               ref={node => (this.menuAddrInput = node)}
-            />
-            <Button type="primary" icon="search">
+            /> */}
+            <Button
+              type="primary"
+              icon="search"
+              onClick={() => this.searchByName()}
+            >
               查询
             </Button>
           </div>
@@ -463,7 +416,11 @@ class Console extends React.Component {
           // dataSource={this.state.data}
           // pagination={this.state.pagination}
           dataSource={
-            this.state.data.length ? this.state.data : initMenus.datas
+            this.state.data.length
+              ? this.state.data
+              : searchFlag
+              ? this.state.data
+              : initMenus.datas
           }
           pagination={
             this.state.pagination.total !== undefined

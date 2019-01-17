@@ -13,11 +13,15 @@ const page = name =>
     loading: Loading
   });
 
+console.dir(page('personalCenter/userMsg'));
+console.dir(page('personalCenter/groupMsg'));
+
 const router = new Router({
   mode: 'hash',
   routes: [
     { path: '/', component: page('home') },
     { path: '/login', component: page('login') },
+    { path: '/authLogin', component: page('authLogin') },
     { path: '/register', component: page('register') },
     {
       path: '/admin',
@@ -61,6 +65,11 @@ const router = new Router({
           path: '/safetyCheck',
           name: 'safetyCheck',
           component: page('personalCenter/safetyCheck')
+        }, // 安全验证
+        {
+          path: '/doubleCheck',
+          name: 'doubleCheck',
+          component: page('personalCenter/doubleCheck')
         }, // 安全验证
         {
           path: '/console',

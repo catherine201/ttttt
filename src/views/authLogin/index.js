@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './login.less';
+import styles from './index.less';
 import LoginPassWord from './loginPassWord';
 import createApi from '../../api/registerAndLogin';
 import LoginGa from './loginGa';
+import { getParams } from '../../utils';
 
 const srcImg = require('../../assets/images/logo.png');
 
@@ -28,7 +29,9 @@ class Login extends React.Component {
     // isLoding: false
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    console.log(getParams('appid'));
+  }
 
   changeState = obj => {
     // console.log(val);
@@ -42,40 +45,14 @@ class Login extends React.Component {
     // const userObj = res.data;
     const authObj = {
       access_token: res.data.access_token,
-      appid: 'd862b911825b21d72275420ae4456b80'
+      appid: getParams('appid')
     };
     const authResult = await createApi.authLogin(authObj);
     if (authResult) {
-      const userObj = res.data;
-      const info = {
-        auth_code: authResult.data.auth_code,
-        open_id: res.data.openid
-      };
-      const result = await createApi.secondLogin(info);
-      if (result) {
-        this.props.dispatch.menu.getOwnMenu();
-        userObj.second_access_token = result.access_token;
-        userObj._id = result.user_id;
-        userObj.auth_code = authResult.data.auth_code;
-        userObj.avatar_url = res.data.avatar_url;
-        sessionStorage.setItem('user', JSON.stringify(userObj));
-        // console.log(res.data);
-        this.props.dispatch.aside.getAvatar(res.data.avatar_url);
-        this.props.dispatch.aside.getNickName(res.data.nickname);
-        this.props.dispatch.aside.getBindStatus(res.data.ga_verify);
-        this.props.history.push('/personalCenter/');
-        // this.props.changeState(1);
-        // this.props.history.push('/personalCenter/user');
-      } else {
-        this.$msg.error('登陆失败');
-      }
+      window.location.href = `${getParams('redirect_uri')}?auth_code=${
+        authResult.data.auth_code
+      }&scope=${getParams('scope')}&state=${getParams('state')}`;
     }
-    // const userObj = res.data;
-    // sessionStorage.setItem('user', JSON.stringify(userObj));
-    // this.props.dispatch.aside.getAvatar(res.data.avatar_url);
-    // this.props.dispatch.aside.getNickName(res.data.nickname);
-    // this.props.dispatch.aside.getBindStatus(res.data.ga_verify);
-    // this.props.history.push('/personalCenter/');
   };
 
   render() {
