@@ -69,7 +69,7 @@ class LoginPassWord extends React.Component {
       //   }
       // }
     } else {
-      this.$msg.error(res.message);
+      res && this.$msg.error(res.message);
     }
   };
 

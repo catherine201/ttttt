@@ -31,7 +31,7 @@ class LoginGa extends React.Component {
       console.log(res);
       this.props.successLogin(res);
     } else {
-      this.$msg.error(res.message);
+      res && this.$msg.error(res.message);
     }
   };
 

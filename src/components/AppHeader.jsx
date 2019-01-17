@@ -204,7 +204,14 @@ class AppHeader extends React.Component {
               <Dropdown overlay={this.dropdownMenu()} trigger={['click']}>
                 <a className="ant-dropdown-link" href="#/">
                   {/* <Icon type="user" />Administrator<Icon type="down" /> */}
-                  <img src={avatar} alt="user" className="user-avator" />
+                  <img
+                    src={
+                      avatar ||
+                      'https://avatars2.githubusercontent.com/u/11366654?s=64&v=4'
+                    }
+                    alt="user"
+                    className="user-avator"
+                  />
                   {nickName}
                   <Icon type="down" />
                 </a>
