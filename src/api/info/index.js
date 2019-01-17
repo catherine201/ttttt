@@ -33,7 +33,7 @@ const config = {
       showLoading: false
     }
   },
-  // 解绑google
+  // 解绑google  配置登录不需要
   unBindGoogle: {
     url: '/users',
     method: 'delete',
@@ -41,7 +41,7 @@ const config = {
       baseUrl: serverIp.login
     }
   },
-  // 解绑google
+  // 解绑google  配置登录需要
   bindGoogle: {
     url: '/users',
     method: 'put',

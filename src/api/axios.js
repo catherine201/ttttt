@@ -91,7 +91,7 @@ axios.interceptors.response.use(
       //     errorMsg = '请求失败';
       // }
     } else if (error.request) {
-      errorMsg = '请求失败';
+      errorMsg = error.message;
     } else {
       errorMsg = error.message;
     }
@@ -199,7 +199,7 @@ function fetchApi(param, options) {
               errorMsg = '请求失败';
           }
         } else if (error.request) {
-          errorMsg = '请求失败';
+          errorMsg = error.message;
         } else {
           errorMsg = error.message;
         }

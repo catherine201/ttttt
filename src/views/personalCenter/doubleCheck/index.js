@@ -85,28 +85,53 @@ class DoubleCheck extends React.Component {
     }
   };
 
-  bindGoogle = async obj => {
+  bindGoogle = async (obj, val) => {
     const res = await createApi.bindGoogle(obj);
     console.log(res);
-    if (res && res.data && res.data.bind) {
+    if (res && res.data) {
       console.log(res);
       this.props.form.resetFields();
       // this.$msg.success('绑定成功');
-      notification.success({
-        message: '绑定成功'
-      });
-      this.props.getBindStatus(true);
-    } else {
-      this.$msg.error('绑定失败');
+      if (val === 'bind') {
+        if (res.data.bind) {
+          notification.success({
+            message: '绑定成功'
+          });
+          this.props.getBindStatus(true);
+        } else {
+          this.$msg.error('绑定失败');
+        }
+      } else if (res.data.enable) {
+        notification.success({
+          message: '配置登录需要谷歌验证码成功'
+        });
+      } else {
+        this.$msg.error('配置登录需要谷歌验证码失败');
+      }
     }
   };
 
-  unBindGoogle = async obj => {
+  unBindGoogle = async (obj, val) => {
     const res = await createApi.unBindGoogle(obj);
     console.log(res);
-    if (res) {
-      this.init();
-      this.props.getBindStatus(false);
+    if (res && res.data) {
+      if (val === 'bind') {
+        if (res.data.unbind) {
+          this.init();
+          this.props.getBindStatus(false);
+          notification.success({
+            message: '解绑成功'
+          });
+        } else {
+          this.$msg.error('解绑失败');
+        }
+      } else if (res.data.disable) {
+        notification.success({
+          message: '配置登录不需要谷歌验证码成功'
+        });
+      } else {
+        this.$msg.error('配置登录不需要谷歌验证码成功');
+      }
     }
   };
 
@@ -143,19 +168,26 @@ class DoubleCheck extends React.Component {
           }
         };
         if (val !== 'config') {
-          this.props.bindStatus ? this.unBindGoogle(obj) : this.bindGoogle(obj);
+          this.props.bindStatus
+            ? this.unBindGoogle(obj, 'bind')
+            : this.bindGoogle(obj, 'bind');
         } else {
           const configObj = {
             url: `${
               JSON.parse(sessionStorage.getItem('user')).openid
-            }/bind/google`,
+            }/verify/google`,
             query: {
               access_token: JSON.parse(sessionStorage.getItem('user'))
                 .access_token,
-              code: values.login
+              code: values.checkCode
             }
           };
-          this.unBindGoogle(configObj);
+          if (values.login) {
+            this.bindGoogle(configObj);
+          } else {
+            this.unBindGoogle(configObj);
+          }
+          // this.unBindGoogle(configObj);
         }
       }
     });

@@ -62,7 +62,7 @@ class Login extends React.Component {
         // console.log(res.data);
         this.props.dispatch.aside.getAvatar(res.data.avatar_url);
         this.props.dispatch.aside.getNickName(res.data.nickname);
-        this.props.dispatch.aside.getBindStatus(res.data.ga_verify);
+        this.props.dispatch.aside.getBindStatus(res.data.ga_bind);
         this.props.history.push('/personalCenter/');
         // this.props.changeState(1);
         // this.props.history.push('/personalCenter/user');

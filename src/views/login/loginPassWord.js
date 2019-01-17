@@ -31,7 +31,7 @@ class LoginPassWord extends React.Component {
     const res = await createApi.login(obj);
     if (res && res.error_code === 1) {
       console.log(res);
-      if (res.data.google_auth === undefined) {
+      if (res.data.google_auth === undefined || res.data.google_auth) {
         this.props.successLogin(res);
       } else if (res.data.google_auth === false) {
         const sendObj = {
