@@ -38,20 +38,26 @@ export default class Asider extends React.Component {
         text: '变更密码'
       },
       {
-        key: 'binding',
-        path: '/personalCenter/binding',
-        text: '绑定'
-      },
-      {
-        key: 'safetyCheck',
-        path: '/personalCenter/safetyCheck',
-        text: '安全验证'
-      },
-      {
-        key: 'console',
-        path: '/personalCenter/console',
-        text: '控制台'
-      },
+        key: 'doubleCheck',
+        path: '/personalCenter/doubleCheck',
+        text: '双重认证'
+      }
+      // {
+      //   key: 'binding',
+      //   path: '/personalCenter/binding',
+      //   text: '绑定'
+      // },
+      // {
+      //   key: 'safetyCheck',
+      //   path: '/personalCenter/safetyCheck',
+      //   text: '安全验证'
+      // }
+    ]
+  };
+
+  componentDidMount() {
+    console.log('aside');
+    const add = [
       {
         key: 'user',
         path: '/personalCenter/user',
@@ -67,11 +73,17 @@ export default class Asider extends React.Component {
         path: '/personalCenter/menu',
         text: '菜单管理'
       }
-    ]
-  };
+    ];
+    if (JSON.parse(sessionStorage.getItem('user')).type === 'admin') {
+      this.state.menu.push(...add);
+      console.log(this.state.menu);
+      this.setState({
+        menu: this.state.menu
+      });
+    }
+  }
 
   render() {
-    console.log(this.props.isShow);
     return (
       <div
         className={`personalSide ${

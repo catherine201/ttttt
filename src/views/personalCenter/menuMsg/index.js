@@ -23,12 +23,13 @@ class Console extends React.Component {
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增菜单  2 表示显示 编辑菜单
       data: [],
       sendData: {}, // 发送给新增编辑组件的值
-      limit: 6 // 一页多少个项
+      limit: 6, // 一页多少个项
+      searchFlag: false
     };
   }
 
   componentDidMount() {
-    !this.props.initMenus.datas && this.props.getInitMenu();
+    !this.props.initMenus.init && this.props.getInitMenu();
     // const pagination = { ...this.state.pagination };
     // pagination.total = 20;
     // this.setState({
@@ -51,7 +52,8 @@ class Console extends React.Component {
       pagination.total = res.paging.total;
       this.setState({
         pagination,
-        data: res.datas
+        data: res.datas,
+        searchFlag: true
       });
       // console.log(pagination.total);
     }
@@ -61,7 +63,8 @@ class Console extends React.Component {
     const obj = {
       keyword: this.state.menuNameInput
     };
-    this.state.menuNameInput && this.queryMenus(obj);
+    // this.state.menuNameInput &&
+    this.queryMenus(obj);
   };
 
   addMenu = async obj => {
@@ -160,67 +163,6 @@ class Console extends React.Component {
       pagination: pager
     });
   };
-
-  // getColumnSearchProps = dataIndex => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters
-  //   }) => (
-  //     <div className="custom-filter-dropdown">
-  //       <Input
-  //         ref={node => {
-  //           this.searchInput = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e =>
-  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
-  //         }
-  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
-  //         icon="search"
-  //         size="small"
-  //         style={{ width: 90, marginRight: 8 }}
-  //       >
-  //         Search
-  //       </Button>
-  //       <Button
-  //         onClick={() => this.handleReset(clearFilters)}
-  //         size="small"
-  //         style={{ width: 90 }}
-  //       >
-  //         Reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: filtered => (
-  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: visible => {
-  //     if (visible) {
-  //       setTimeout(() => this.searchInput.select());
-  //     }
-  //   },
-  //   render: text => (
-  //     <Highlighter
-  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //       searchWords={[this.state.searchText]}
-  //       autoEscape
-  //       textToHighlight={text.toString()}
-  //     />
-  //   )
-  // });
 
   changeMenuName = e => {
     this.setState({
@@ -428,7 +370,7 @@ class Console extends React.Component {
         // ...this.getColumnSearchProps('address')
       }
     ];
-    const { sendData } = this.state;
+    const { sendData, searchFlag } = this.state;
     return (
       <div className={`menuMsg_wrapper ${styles.menuMsg_wrapper}`}>
         <div className={`query ${styles.query}`}>
@@ -474,7 +416,11 @@ class Console extends React.Component {
           // dataSource={this.state.data}
           // pagination={this.state.pagination}
           dataSource={
-            this.state.data.length ? this.state.data : initMenus.datas
+            this.state.data.length
+              ? this.state.data
+              : searchFlag
+              ? this.state.data
+              : initMenus.datas
           }
           pagination={
             this.state.pagination.total !== undefined

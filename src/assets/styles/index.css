@@ -97,3 +97,12 @@ html body .christmas.ant-btn-primary:before{
     height: 42px;
     line-height: 42px;
   }
+  .font16{
+    font-size: 16px;
+  }
+  .mouse_hover{
+    cursor: pointer;
+  }
+  .mb20{
+    margin-bottom: 20px;
+  }

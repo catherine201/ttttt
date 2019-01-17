@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Layout, Menu, Icon, Dropdown } from 'antd';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { requestFullScreen, exitFullscreen } from '../utils/index';
-import createApi from '../api/registerAndLogin';
+// import createApi from '../api/registerAndLogin';
 
 const { Header } = Layout;
 
@@ -17,12 +17,15 @@ class AppHeader extends React.Component {
   }
 
   logout = async () => {
-    const res = await createApi.logout();
-    if (res) {
-      sessionStorage.removeItem('user');
-      window.sessionStorage.clear();
-      this.props.history.push('/login');
-    }
+    sessionStorage.removeItem('user');
+    window.sessionStorage.clear();
+    this.props.history.push('/login');
+    // const res = await createApi.logout();
+    // if (res) {
+    //   sessionStorage.removeItem('user');
+    //   window.sessionStorage.clear();
+    //   this.props.history.push('/login');
+    // }
   };
 
   toHref = addr => {
@@ -72,38 +75,78 @@ class AppHeader extends React.Component {
           密码变更
         </Menu.Item>
         <Menu.Item
+          key="4"
+          onClick={() => this.toHref('/personalCenter/doubleCheck')}
+        >
+          <Icon type="check-circle" style={{ marginRight: '5px' }} />
+          双重认证
+        </Menu.Item>
+        {JSON.parse(sessionStorage.getItem('user')).type === 'admin' && (
+          <Menu.Item
+            key="5"
+            onClick={() => this.toHref('/personalCenter/user')}
+          >
+            <Icon type="user" style={{ marginRight: '5px' }} />
+            用户管理
+          </Menu.Item>
+        )}
+        {JSON.parse(sessionStorage.getItem('user')).type === 'admin' && (
+          <Menu.Item
+            key="6"
+            onClick={() => this.toHref('/personalCenter/group')}
+          >
+            <Icon type="team" style={{ marginRight: '5px' }} />
+            分组管理
+          </Menu.Item>
+        )}
+        {JSON.parse(sessionStorage.getItem('user')).type === 'admin' && (
+          <Menu.Item
+            key="7"
+            onClick={() => this.toHref('/personalCenter/menu')}
+          >
+            <Icon type="menu" style={{ marginRight: '5px' }} />
+            菜单管理
+          </Menu.Item>
+        )}
+        {/* <Menu.Item
           key="2"
           onClick={() => this.toHref('/personalCenter/binding')}
         >
           <Icon type="link" style={{ marginRight: '5px' }} />
           账号绑定
-        </Menu.Item>
-        <Menu.Item
+        </Menu.Item> */}
+        {/* <Menu.Item
           key="3"
           onClick={() => this.toHref('/personalCenter/safetyCheck')}
         >
           <Icon type="check-circle" style={{ marginRight: '5px' }} />
           安全验证
-        </Menu.Item>
-        <Menu.Item
-          key="4"
-          onClick={() => this.toHref('/personalCenter/console')}
-        >
-          <Icon type="check-circle" style={{ marginRight: '5px' }} />
-          控制台
-        </Menu.Item>
-        <Menu.Item key="5" onClick={() => this.toHref('/personalCenter/user')}>
-          <Icon type="check-circle" style={{ marginRight: '5px' }} />
-          用户管理
-        </Menu.Item>
-        <Menu.Item key="6" onClick={() => this.toHref('/personalCenter/group')}>
-          <Icon type="check-circle" style={{ marginRight: '5px' }} />
-          分组管理
-        </Menu.Item>
-        <Menu.Item key="7" onClick={() => this.toHref('/personalCenter/menu')}>
-          <Icon type="check-circle" style={{ marginRight: '5px' }} />
-          菜单管理
-        </Menu.Item>
+        </Menu.Item> */}
+        {/* {JSON.parse(sessionStorage.getItem('user')).type === 'admin' && (
+          <React.Fragment>
+            <Menu.Item
+              key="5"
+              onClick={() => this.toHref('/personalCenter/user')}
+            >
+              <Icon type="check-circle" style={{ marginRight: '5px' }} />
+              用户管理
+            </Menu.Item>
+            <Menu.Item
+              key="6"
+              onClick={() => this.toHref('/personalCenter/group')}
+            >
+              <Icon type="check-circle" style={{ marginRight: '5px' }} />
+              分组管理
+            </Menu.Item>
+            <Menu.Item
+              key="7"
+              onClick={() => this.toHref('/personalCenter/menu')}
+            >
+              <Icon type="check-circle" style={{ marginRight: '5px' }} />
+              菜单管理
+            </Menu.Item>
+          </React.Fragment>
+        )} */}
         <Menu.Divider />
         <Menu.Item key="8" onClick={() => this.doLogout()}>
           <Icon type="logout" style={{ marginRight: '5px' }} />
@@ -144,6 +187,8 @@ class AppHeader extends React.Component {
   }
 
   render() {
+    const { avatar, nickName } = this.props;
+    console.log(avatar);
     return (
       <Header>
         <div className="f-left">
@@ -159,12 +204,8 @@ class AppHeader extends React.Component {
               <Dropdown overlay={this.dropdownMenu()} trigger={['click']}>
                 <a className="ant-dropdown-link" href="#/">
                   {/* <Icon type="user" />Administrator<Icon type="down" /> */}
-                  <img
-                    src="https://avatars2.githubusercontent.com/u/11366654?s=64&v=4"
-                    alt="user"
-                    className="user-avator"
-                  />
-                  {JSON.parse(window.sessionStorage.getItem('user')).name}
+                  <img src={avatar} alt="user" className="user-avator" />
+                  {nickName}
                   <Icon type="down" />
                 </a>
               </Dropdown>
@@ -192,9 +233,7 @@ class AppHeader extends React.Component {
         </div>
         <div>
           <Menu theme="dark" mode="horizontal">
-            <Menu.Item key="1">
-              <Link to="/admin">Home</Link>
-            </Menu.Item>
+            <Menu.Item key="1">{/* <Link to="/admin">Home</Link> */}</Menu.Item>
           </Menu>
         </div>
       </Header>
@@ -204,22 +243,16 @@ class AppHeader extends React.Component {
 
 // export default AppHeader;
 const mapStateToProps = state => ({
-  menuArr: state.menu.menuArr,
-  groupArr: state.menu.groupArr,
-  initMenus: state.query.initMenus,
-  initGroup: state.query.initGroup,
-  initUser: state.query.initUser
+  avatar: state.aside.avatar,
+  nickName: state.aside.nickName
 });
 
-const mapDispatchToProps = dispatch => ({
-  getMenu: dispatch.menu.getMenu,
-  getGroup: dispatch.menu.getGroup,
-  getInitMenu: dispatch.query.getInitMenu,
-  getInitUser: dispatch.query.getInitUser,
-  getInitGroup: dispatch.query.getInitGroup
-});
+// const mapDispatchToProps = dispatch => ({
+//   getMenu: dispatch.menu.getMenu,
+//   getGroup: dispatch.menu.getGroup,
+//   getInitMenu: dispatch.query.getInitMenu,
+//   getInitUser: dispatch.query.getInitUser,
+//   getInitGroup: dispatch.query.getInitGroup
+// });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AppHeader);
+export default connect(mapStateToProps)(AppHeader);

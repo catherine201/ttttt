@@ -1,4 +1,5 @@
 import createApi from '../createApi';
+import { serverIp } from '../server_config';
 
 const config = {
   // 查询所有菜单
@@ -8,6 +9,13 @@ const config = {
     options: {
       errorHandler: true,
       showLoading: false
+    }
+  },
+  authLogin: {
+    url: '/api/tokens/auth_code',
+    method: 'get',
+    options: {
+      baseUrl: serverIp.login
     }
   },
   // 查询所有分组

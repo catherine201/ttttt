@@ -157,7 +157,7 @@ class RegistrationForm extends React.Component {
           </FormItem>
           <FormItem
             {...tailFormItemLayout}
-            className={styles['form-text-right']}
+            // className={styles['form-text-right']}
           >
             <Button type="primary" htmlType="submit">
               更新密码

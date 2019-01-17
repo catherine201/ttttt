@@ -32,14 +32,15 @@ class Console extends React.Component {
       originalSendData: {}, // 发送给新增编辑组件的最初值
       editSendData: {}, // 发送给修改权限组件的值
       limit: 6,
-      userInfo: [] // 用户信息
+      userInfo: [], // 用户信息
+      searchFlag: false
     };
     this.handleEdit = this.handleEdit.bind(this);
   }
 
   componentDidMount() {
     !this.props.menuArr.length ? this.props.getMenu() : false;
-    !this.props.initGroup.datas ? this.props.getInitGroup() : false;
+    !this.props.initGroup.init ? this.props.getInitGroup() : false;
     // console.log('重新创建');
     // const obj = {
     //   limit: this.state.limit,
@@ -56,7 +57,8 @@ class Console extends React.Component {
       pagination.total = res.paging.total;
       this.setState({
         pagination,
-        data: res.datas
+        data: res.datas,
+        searchFlag: true
       });
     }
   };
@@ -65,7 +67,8 @@ class Console extends React.Component {
     const obj = {
       keyword: this.state.groupNameInput
     };
-    this.state.groupNameInput && this.queryTeams(obj);
+    // this.state.groupNameInput &&
+    this.queryTeams(obj);
   };
 
   queryUsers = async obj => {
@@ -407,7 +410,7 @@ class Console extends React.Component {
 
   render() {
     const { menuArr, initGroup } = this.props;
-    const { sendData, editSendData, userInfo } = this.state;
+    const { sendData, editSendData, userInfo, searchFlag } = this.state;
     const nameSuffix = this.state.groupNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -509,7 +512,11 @@ class Console extends React.Component {
             // dataSource={this.state.data}
             // pagination={this.state.pagination}
             dataSource={
-              this.state.data.length ? this.state.data : initGroup.datas
+              this.state.data.length
+                ? this.state.data
+                : searchFlag
+                ? this.state.data
+                : initGroup.datas
             }
             pagination={
               this.state.pagination.total !== undefined
