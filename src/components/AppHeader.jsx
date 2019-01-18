@@ -212,7 +212,8 @@ class AppHeader extends React.Component {
                     alt="user"
                     className="user-avator"
                   />
-                  {nickName}
+                  {nickName ||
+                    JSON.parse(window.sessionStorage.getItem('user')).name}
                   <Icon type="down" />
                 </a>
               </Dropdown>
