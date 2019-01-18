@@ -28,6 +28,17 @@ class AddEditGroup extends React.Component {
     );
   }
 
+  onChangeName = e => {
+    console.log(e.target.value);
+    console.log(this.state.data);
+    this.state.data.name = e.target.value;
+    console.log(this.state.data);
+  };
+
+  onChangeDesc = e => {
+    this.state.data.description = e.target.value;
+  };
+
   render() {
     // console.log(this.props.form);
     const { getFieldDecorator } = this.props.form;
@@ -52,7 +63,7 @@ class AddEditGroup extends React.Component {
               <Input
                 placeholder="请输入分组名称"
                 // value={data.name}
-                // onChange={this.onChangeName}
+                onChange={this.onChangeName}
               />
             )}
           </Form.Item>
@@ -63,7 +74,7 @@ class AddEditGroup extends React.Component {
               <Input
                 placeholder="请输入描述"
                 // value={data.description}
-                // onChange={this.onChangeDesc}
+                onChange={this.onChangeDesc}
               />
             )}
           </Form.Item>

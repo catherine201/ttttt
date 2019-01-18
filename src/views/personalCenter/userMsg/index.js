@@ -39,24 +39,8 @@ class Console extends React.Component {
         clientHeight: document.body.offsetHeight - 400
       });
     });
-    // const obj = {
-    //   access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
-    //   limit: this.state.limit,
-    //   offset: 0
-    // };
-    // this.queryUser(obj);
     !this.props.groupArr.length && this.props.getGroup();
-    // console.log(this.props);
-    // const pagination = { ...this.state.pagination };
-    // pagination.total = res.paging.total;
-    // console.log(res.paging.total);
     !this.props.initUser.init && this.props.getInitUser();
-    // pagination.total =
-    //   this.props.initUser.paging && this.props.initUser.paging.total;
-    // this.setState({
-    //   pagination,
-    //   data: this.props.initUser.datas
-    // });
   }
 
   queryUser = async obj => {

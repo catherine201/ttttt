@@ -168,6 +168,7 @@ class Console extends React.Component {
 
   revise = async (bool, sendObj) => {
     const { sendData } = this.state;
+    console.log(sendData);
     if (!bool) {
       const obj = {
         url: `${sendData._id}/menus`,
@@ -286,12 +287,15 @@ class Console extends React.Component {
     // 修改权限那里如果取消就拿回原来的值
     switch (this.state.showModal) {
       case 3:
-        this.setState({
-          sendData: {
-            name: this.state.originalSendData.name,
-            description: this.state.originalSendData.description,
-            menu_ids: this.state.originalSendData.menu_ids
-          }
+        console.log(this.formRef);
+        this.setState(preState => {
+          console.log(preState);
+          return {
+            sendData: {
+              ...this.state.sendData,
+              menu_ids: this.state.originalSendData.menu_ids
+            }
+          };
         });
         break;
       default:
