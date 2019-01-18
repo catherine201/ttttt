@@ -13,22 +13,29 @@ class Console extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientHeight: document.body.offsetHeight - 400, // 屏幕高度
       // searchText: '', // table里面的search
       menuNameInput: '', // 头部的查询
       // menuAddrInput: '',
       pagination: {
         defaultCurrent: 1,
-        defaultPageSize: 6
+        defaultPageSize: 12
       },
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增菜单  2 表示显示 编辑菜单
       data: [],
       sendData: {}, // 发送给新增编辑组件的值
-      limit: 6, // 一页多少个项
+      limit: 12, // 一页多少个项
       searchFlag: false
     };
   }
 
   componentDidMount() {
+    window.addEventListener('resize', () => {
+      console.log(this);
+      this.setState({
+        clientHeight: document.body.offsetHeight - 400
+      });
+    });
     !this.props.initMenus.init && this.props.getInitMenu();
     // const pagination = { ...this.state.pagination };
     // pagination.total = 20;
@@ -78,7 +85,7 @@ class Console extends React.Component {
           : 0
       };
       this.setState({
-        data: [],
+        // data: [],
         pagination: {}
       });
       this.queryMenus(obj);
@@ -99,9 +106,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   data: []
+      // });
       this.queryMenus(obj);
       this.props.getInitMenu();
       this.props.getMenu();
@@ -119,9 +126,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   data: []
+      // });
       this.queryMenus(obj);
       this.props.getInitMenu();
       this.props.getMenu();
@@ -155,7 +162,7 @@ class Console extends React.Component {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     const obj = {
-      limit: 6,
+      limit: 12,
       offset: (pagination.current - 1) * this.state.limit
     };
     this.queryMenus(obj);
@@ -370,7 +377,7 @@ class Console extends React.Component {
         // ...this.getColumnSearchProps('address')
       }
     ];
-    const { sendData, searchFlag } = this.state;
+    const { sendData, searchFlag, clientHeight } = this.state;
     return (
       <div className={`menuMsg_wrapper ${styles.menuMsg_wrapper}`}>
         <div className={`query ${styles.query}`}>
@@ -425,13 +432,14 @@ class Console extends React.Component {
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
-              : { ...initMenus.paging, defaultCurrent: 1, defaultPageSize: 6 }
+              : { ...initMenus.paging, defaultCurrent: 1, defaultPageSize: 12 }
           }
           onChange={this.handleTableChange}
           rowKey={record => {
             console.log(record._id);
             return record._id;
           }}
+          scroll={{ y: clientHeight }}
         />
         <Modal
           className="groupMsg_modal"

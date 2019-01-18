@@ -24,7 +24,8 @@ const config = {
     url: '/api/tokens/auth_code',
     method: 'get',
     options: {
-      baseUrl: serverIp.login
+      baseUrl: serverIp.login,
+      showLoading: false
     }
   }
 };

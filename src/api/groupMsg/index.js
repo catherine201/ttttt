@@ -7,7 +7,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: false
     }
   },
   // 查询所有分组

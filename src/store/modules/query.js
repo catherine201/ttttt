@@ -40,7 +40,7 @@ const asideState = {
   },
   effects: dispatch => ({
     async getInitMenu() {
-      const res = await createApi.queryMenus({ limit: 6, offset: 0 });
+      const res = await createApi.queryMenus({ limit: 12, offset: 0 });
       if (res) {
         console.log(res.datas);
         console.log(dispatch);
@@ -65,7 +65,7 @@ const asideState = {
         // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
         auth_code: authResult.data.auth_code,
         open_id: JSON.parse(sessionStorage.getItem('user')).openid,
-        limit: 6,
+        limit: 12,
         offset: 0
       };
       const res = await createApi.queryUser(obj);
@@ -77,7 +77,7 @@ const asideState = {
       }
     },
     async getInitGroup() {
-      const res = await createApi.queryTeams({ limit: 6, offset: 0 });
+      const res = await createApi.queryTeams({ limit: 12, offset: 0 });
       if (res) {
         console.log(res.datas);
         console.log(dispatch);

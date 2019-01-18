@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, InputNumber } from 'antd';
 import styles from './index.less';
 import { regular } from '../../../utils/validate';
 
@@ -61,6 +61,8 @@ class AddEditMenu extends React.Component {
                 })(<Input placeholder="请输入菜单名称" />)}
               </Form.Item>
             </Col>
+          </Row>
+          <Row>
             <Col span={12}>
               <Form.Item label="描述" {...formItemLayout}>
                 {getFieldDecorator('remark', {
@@ -70,10 +72,11 @@ class AddEditMenu extends React.Component {
             </Col>
           </Row>
           <Row>
+            {/* type="number"  */}
             <Col span={12}>
               <Form.Item label="排序" {...formItemLayout}>
                 {getFieldDecorator('sort')(
-                  <Input placeholder="请输入排序" type="number" />
+                  <InputNumber placeholder="排序" min={0} />
                 )}
               </Form.Item>
             </Col>

@@ -18,20 +18,21 @@ class Console extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientHeight: document.body.offsetHeight - 400, // 屏幕高度
       isShow: true,
       // searchText: '', // table里面的search
       groupNameInput: '', // 头部的查询
       // groupDescInput: '',
       pagination: {
         defaultCurrent: 1,
-        defaultPageSize: 6
+        defaultPageSize: 12
       },
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增分组  2 表示显示 编辑分组 3 表示显示修改组权限
       data: [],
       sendData: {}, // 发送给新增编辑组件的值
       originalSendData: {}, // 发送给新增编辑组件的最初值
       editSendData: {}, // 发送给修改权限组件的值
-      limit: 6,
+      limit: 12,
       userInfo: [], // 用户信息
       searchFlag: false
     };
@@ -39,6 +40,12 @@ class Console extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', () => {
+      console.log(this);
+      this.setState({
+        clientHeight: document.body.offsetHeight - 400
+      });
+    });
     !this.props.menuArr.length ? this.props.getMenu() : false;
     !this.props.initGroup.init ? this.props.getInitGroup() : false;
     // console.log('重新创建');
@@ -109,7 +116,7 @@ class Console extends React.Component {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     const obj = {
-      limit: 6,
+      limit: 12,
       offset: (pagination.current - 1) * this.state.limit
     };
     this.queryTeams(obj);
@@ -117,67 +124,6 @@ class Console extends React.Component {
       pagination: pager
     });
   };
-
-  // getColumnSearchProps = dataIndex => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters
-  //   }) => (
-  //     <div className="custom-filter-dropdown">
-  //       <Input
-  //         ref={node => {
-  //           this.searchInput = node;
-  //         }}
-  //         placeholder={`Search ${dataIndex}`}
-  //         value={selectedKeys[0]}
-  //         onChange={e =>
-  //           setSelectedKeys(e.target.value ? [e.target.value] : [])
-  //         }
-  //         onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
-  //         style={{ width: 188, marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         onClick={() => this.handleSearch(selectedKeys, confirm)}
-  //         icon="search"
-  //         size="small"
-  //         style={{ width: 90, marginRight: 8 }}
-  //       >
-  //         Search
-  //       </Button>
-  //       <Button
-  //         onClick={() => this.handleReset(clearFilters)}
-  //         size="small"
-  //         style={{ width: 90 }}
-  //       >
-  //         Reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: filtered => (
-  //     <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: visible => {
-  //     if (visible) {
-  //       setTimeout(() => this.searchInput.select());
-  //     }
-  //   },
-  //   render: text => (
-  //     <Highlighter
-  //       highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //       searchWords={[this.state.searchText]}
-  //       autoEscape
-  //       textToHighlight={text.toString()}
-  //     />
-  //   )
-  // });
 
   changeGroupName = e => {
     this.setState({
@@ -210,9 +156,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   data: []
+      // });
       this.queryTeams(obj);
       this.props.getOwnMenu();
       this.props.getInitGroup();
@@ -220,7 +166,8 @@ class Console extends React.Component {
     }
   };
 
-  revise = async (bool, sendData) => {
+  revise = async (bool, sendObj) => {
+    const { sendData } = this.state;
     if (!bool) {
       const obj = {
         url: `${sendData._id}/menus`,
@@ -233,8 +180,8 @@ class Console extends React.Component {
         this.reviseTeam({
           url: sendData._id,
           query: {
-            name: sendData.name,
-            description: sendData.description
+            name: sendObj.name,
+            description: sendObj.description
           }
         });
       }
@@ -242,8 +189,8 @@ class Console extends React.Component {
       this.reviseTeam({
         url: sendData._id,
         query: {
-          name: sendData.name,
-          description: sendData.description
+          name: sendObj.name,
+          description: sendObj.description
         }
       });
     }
@@ -258,9 +205,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   data: []
+      // });
       this.queryTeams(obj);
       this.props.getOwnMenu();
       this.props.getInitGroup();
@@ -277,9 +224,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   data: []
+      // });
       this.queryTeams(obj);
       this.props.getOwnMenu();
       this.props.getInitGroup();
@@ -289,7 +236,6 @@ class Console extends React.Component {
 
   handleOk = e => {
     console.log(e);
-    const { sendData } = this.state;
     const num = this.state.showModal === 3 ? 2 : 0;
     switch (this.state.showModal) {
       case 1: // 新增
@@ -313,7 +259,12 @@ class Console extends React.Component {
             const bool = this.state.sendData.menu_ids.equals(
               this.state.originalSendData.menu_ids
             );
-            this.revise(bool, sendData);
+            const sendObj = {
+              name: values.name,
+              description: values.description
+            };
+
+            this.revise(bool, sendObj);
             // const num = this.state.showModal === 3 ? 2 : 0;
             this.setState({
               showModal: num
@@ -410,7 +361,13 @@ class Console extends React.Component {
 
   render() {
     const { menuArr, initGroup } = this.props;
-    const { sendData, editSendData, userInfo, searchFlag } = this.state;
+    const {
+      sendData,
+      editSendData,
+      userInfo,
+      searchFlag,
+      clientHeight
+    } = this.state;
     const nameSuffix = this.state.groupNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -521,13 +478,18 @@ class Console extends React.Component {
             pagination={
               this.state.pagination.total !== undefined
                 ? this.state.pagination
-                : { ...initGroup.paging, defaultCurrent: 1, defaultPageSize: 6 }
+                : {
+                    ...initGroup.paging,
+                    defaultCurrent: 1,
+                    defaultPageSize: 12
+                  }
             }
             onChange={this.handleTableChange}
             rowKey={record => {
               console.log(record._id);
               return record._id;
             }}
+            scroll={{ y: clientHeight }}
           />
         )}
         <Modal

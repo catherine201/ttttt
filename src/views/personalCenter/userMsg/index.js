@@ -14,16 +14,17 @@ class Console extends React.Component {
     super(props);
     this.state = {
       // searchText: '', // table里面的search
+      clientHeight: document.body.offsetHeight - 400, // 屏幕高度
       userNameInput: '', // 头部的查询
       pagination: {
         defaultCurrent: 1,
-        defaultPageSize: 6
+        defaultPageSize: 12
       },
       showModal: 0, // 0 表示不显示modal 1 表示显示 新增分组  2 表示显示 编辑分组 3 表示显示修改组权限
       data: [],
       originalSendData: {}, // 发送给编辑组件的最初值
       editSendData: {}, // 发送给修改权限组件的值
-      limit: 6, // 一页多少个项
+      limit: 12, // 一页多少个项
       editId: '',
       searchFlag: false
     };
@@ -31,6 +32,13 @@ class Console extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.state.clientHeight);
+    window.addEventListener('resize', () => {
+      console.log(this);
+      this.setState({
+        clientHeight: document.body.offsetHeight - 400
+      });
+    });
     // const obj = {
     //   access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
     //   limit: this.state.limit,
@@ -101,7 +109,7 @@ class Console extends React.Component {
       // access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
       auth_code: JSON.parse(sessionStorage.getItem('user')).auth_code,
       open_id: JSON.parse(sessionStorage.getItem('user')).openid,
-      limit: 6,
+      limit: 12,
       offset: (pagination.current - 1) * this.state.limit
     };
     this.queryUser(obj);
@@ -136,9 +144,9 @@ class Console extends React.Component {
           ? (this.state.pagination.current - 1) * this.state.limit
           : 0
       };
-      this.setState({
-        data: []
-      });
+      // this.setState({
+      //   searchFlag: true
+      // });
       this.queryUser(obj);
       this.props.getOwnMenu();
       this.props.getInitUser();
@@ -187,7 +195,7 @@ class Console extends React.Component {
 
   render() {
     const { groupArr, initUser } = this.props;
-    const { editSendData, searchFlag } = this.state;
+    const { editSendData, searchFlag, clientHeight } = this.state;
     const nameSuffix = this.state.userNameInput ? (
       <Icon type="close-circle" onClick={this.emitEmptyName} />
     ) : null;
@@ -221,26 +229,33 @@ class Console extends React.Component {
         // dataIndex: 'teams',
         // key: 'teams',
         width: '20%',
-        render: text => (
-          <span>
-            <Tooltip
-              placement="topLeft"
-              title={text.team_ids && idToName(text.team_ids, groupArr)}
-            >
-              <span className={`${styles.dotSpan}`}>
-                {/* {text.teams && text.teams.join(',')} */}
-                {text.team_ids && idToName(text.team_ids, groupArr)}
-              </span>
-            </Tooltip>
-            <Icon
-              className={`${styles.Icon}`}
-              type="form"
-              onClick={() => {
-                this.handleEdit(3, text.team_ids, text._id, text);
-              }}
-            />
-          </span>
-        )
+        render: text => {
+          console.log(text.team_ids);
+          return (
+            <span>
+              <Tooltip
+                placement="topLeft"
+                title={
+                  text.team_ids.length && idToName(text.team_ids, groupArr)
+                }
+              >
+                <span className={`${styles.dotSpan}`}>
+                  {/* {text.teams && text.teams.join(',')} */}
+                  {text.team_ids.length
+                    ? idToName(text.team_ids, groupArr)
+                    : '未分组'}
+                </span>
+              </Tooltip>
+              <Icon
+                className={`${styles.Icon}`}
+                type="form"
+                onClick={() => {
+                  this.handleEdit(3, text.team_ids, text._id, text);
+                }}
+              />
+            </span>
+          );
+        }
       }
       // {
       //   title: '组员',
@@ -293,7 +308,6 @@ class Console extends React.Component {
             新增
           </Button> */}
         </div>
-
         <Table
           columns={columns}
           dataSource={
@@ -306,13 +320,14 @@ class Console extends React.Component {
           pagination={
             this.state.pagination.total !== undefined
               ? this.state.pagination
-              : { ...initUser.paging, defaultCurrent: 1, defaultPageSize: 6 }
+              : { ...initUser.paging, defaultCurrent: 1, defaultPageSize: 12 }
           }
           onChange={this.handleTableChange}
           rowKey={record => {
             console.log(record.open_id);
             return record.open_id;
           }}
+          scroll={{ y: clientHeight }}
         />
         <Modal
           className="groupMsg_modal"

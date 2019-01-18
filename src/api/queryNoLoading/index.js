@@ -8,14 +8,15 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: false
+      showLoading: true
     }
   },
   authLogin: {
     url: '/api/tokens/auth_code',
     method: 'get',
     options: {
-      baseUrl: serverIp.login
+      baseUrl: serverIp.login,
+      showLoading: false
     }
   },
   // 查询所有分组
@@ -24,7 +25,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: false
+      showLoading: true
     }
   },
   // 查询用户列表  获取用户对应菜单
@@ -33,7 +34,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: false
+      showLoading: true
     }
   }
 };

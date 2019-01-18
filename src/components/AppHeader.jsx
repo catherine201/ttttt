@@ -72,7 +72,7 @@ class AppHeader extends React.Component {
           onClick={() => this.toHref('/personalCenter/changePassword')}
         >
           <Icon type="sync" style={{ marginRight: '5px' }} />
-          密码变更
+          变更密码
         </Menu.Item>
         <Menu.Item
           key="4"
