@@ -136,7 +136,7 @@ class RegistrationForm extends React.Component {
               ]
             })(<Input type="password" className={styles['ant-input']} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="验证新密码">
+          <FormItem {...formItemLayout} label="确认新密码">
             {getFieldDecorator('confirm', {
               rules: [
                 {

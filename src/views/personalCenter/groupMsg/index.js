@@ -395,7 +395,7 @@ class Console extends React.Component {
       },
       {
         title: '权限模块',
-        width: '20%',
+        width: '30%',
         render: text => (
           // console.log(text);
           <span>

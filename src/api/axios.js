@@ -91,9 +91,9 @@ axios.interceptors.response.use(
       //     errorMsg = '请求失败';
       // }
     } else {
-      errorMsg = error.message;
+      // errorMsg = error.message;
     }
-    message.error(errorMsg);
+    errorMsg && message.error(errorMsg);
     const num = JSON.parse(JSON.stringify(error)).config.headers.num;
     const originArr = store.getState().demo.countLoadingArr;
     originArr.splice(originArr.indexOf(num), 1);

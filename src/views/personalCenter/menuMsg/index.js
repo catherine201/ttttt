@@ -323,33 +323,37 @@ class Console extends React.Component {
       {
         title: '名称',
         dataIndex: 'name',
-        key: 'name'
-        // width: '20%',
+        key: 'name',
+        width: '10%'
         // ...this.getColumnSearchProps('name')
-      },
-      {
-        title: '描述',
-        dataIndex: 'remark',
-        key: 'remark'
-        // ...this.getColumnSearchProps('remark')
       },
       {
         title: '排序',
         dataIndex: 'sort',
-        key: 'sort'
+        key: 'sort',
+        width: '8%'
         // ...this.getColumnSearchProps('sort')
       },
       {
         title: '跳转地址',
         dataIndex: 'target',
-        key: 'target'
+        key: 'target',
+        width: '20%'
         // ...this.getColumnSearchProps('target')
       },
       {
         title: '图标地址',
         dataIndex: 'icon_url',
-        key: 'icon_url'
+        key: 'icon_url',
+        width: '20%'
         // ...this.getColumnSearchProps('icon_url')
+      },
+      {
+        title: '描述',
+        dataIndex: 'remark',
+        key: 'remark',
+        width: '20%'
+        // ...this.getColumnSearchProps('remark')
       },
       // {
       //   title: '父菜单id',

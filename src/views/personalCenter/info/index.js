@@ -72,12 +72,13 @@ class Info extends React.Component {
     console.log(this.state.uploadUrl);
     // You can use any AJAX library you like
     reqwest({
-      url: window.location.host.includes('localhost')
-        ? this.state.uploadUrl.replace(
-            'http://wwwblockchain.oss-cn-shenzhen.aliyuncs.com',
-            '/oss'
-          )
-        : this.state.uploadUrl,
+      // url: window.location.host.includes('localhost')
+      //   ? this.state.uploadUrl.replace(
+      //       'http://wwwblockchain.oss-cn-shenzhen.aliyuncs.com',
+      //       '/oss'
+      //     )
+      //   : this.state.uploadUrl,
+      url: this.state.uploadUrl,
       method: 'put',
       // contentType: 'application/x-www-form-urlencoded',
       headers: {

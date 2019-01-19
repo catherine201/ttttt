@@ -188,7 +188,7 @@ class Console extends React.Component {
         title: '姓名',
         dataIndex: 'name',
         key: 'name',
-        width: '5%'
+        width: '22%'
         // ...this.getColumnSearchProps('name')
       },
       // {
@@ -212,7 +212,8 @@ class Console extends React.Component {
         title: '分组',
         // dataIndex: 'teams',
         // key: 'teams',
-        width: '20%',
+        width: '60%',
+        // align: 'right',
         render: text => {
           console.log(text.team_ids);
           return (
@@ -230,6 +231,25 @@ class Console extends React.Component {
                     : '未分组'}
                 </span>
               </Tooltip>
+              {/* <Icon
+                className={`${styles.Icon}`}
+                type="form"
+                onClick={() => {
+                  this.handleEdit(3, text.team_ids, text._id, text);
+                }}
+              /> */}
+            </span>
+          );
+        }
+      },
+      {
+        title: '编辑',
+        align: 'right',
+        width: '8%',
+        render: text => {
+          console.log(text.team_ids);
+          return (
+            <span>
               <Icon
                 className={`${styles.Icon}`}
                 type="form"
@@ -293,6 +313,7 @@ class Console extends React.Component {
           </Button> */}
         </div>
         <Table
+          className="user_table"
           columns={columns}
           dataSource={
             this.state.data.length

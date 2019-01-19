@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 // import { Form, Input, Tooltip, Icon } from 'antd';
 // import { Divider } from 'antd';
-import { Input, Table, Tag, Tooltip } from 'antd';
+import { Table, Tag, Tooltip } from 'antd';
 import styles from './index.less';
 
-const Search = Input.Search;
+// const Search = Input.Search;
 class ResiveControl extends React.Component {
   state = {
     tags: []
@@ -84,11 +84,11 @@ class ResiveControl extends React.Component {
           }`}
         >
           <h2>添加权限模块</h2>
-          <Search
+          {/* <Search
             placeholder="请输入您要添加的模块"
             onSearch={value => console.log(value)}
             enterButton
-          />
+          /> */}
           <Table
             rowKey={record => record._id}
             className={styles.search_tab}
