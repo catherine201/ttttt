@@ -90,8 +90,6 @@ axios.interceptors.response.use(
       //   default:
       //     errorMsg = '请求失败';
       // }
-    } else if (error.request) {
-      errorMsg = error.message;
     } else {
       errorMsg = error.message;
     }
@@ -199,16 +197,16 @@ function fetchApi(param, options) {
               errorMsg = '请求失败';
           }
         } else if (error.request) {
-          errorMsg = error.message;
+          // errorMsg = error.message;
         } else {
-          errorMsg = error.message;
+          // errorMsg = error.message;
         }
         if (options.errorHandler) {
           if (options.showLoading) {
             // loadingNum--;
             if (!store.getState().demo.countLoadingArr.length) {
-              // console.log(errorMsg);
-              message.error(errorMsg);
+              console.log(errorMsg);
+              // message.error(errorMsg);
               loading.end();
               return;
             }
