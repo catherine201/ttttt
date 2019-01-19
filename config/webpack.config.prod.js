@@ -520,10 +520,10 @@ module.exports = {
       {
         uglifyOptions: {
           compress: {
-            warnings: false,
-            drop_debugger: true,
-            drop_console: true,
-            pure_funcs: ['console.log'] //移除console
+            // warnings: false,
+            // drop_debugger: true,
+            // drop_console: true,
+            // pure_funcs: ['console.log'] //移除console
           }
         },
         // sourceMap: config.build.productionSourceMap,
