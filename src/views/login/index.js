@@ -49,8 +49,8 @@ class Login extends React.Component {
       const userObj = res.data;
       const info = {
         auth_code: authResult.data.auth_code,
-        // open_id: res.data.openid
-        open_id: 'res.data.openid'
+        open_id: res.data.openid
+        // open_id: 'res.data.openid'
       };
       const result = await createApi.secondLogin(info);
       if (result) {
