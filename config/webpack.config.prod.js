@@ -158,9 +158,9 @@ module.exports = {
       .replace(/\\/g, '/'),
   },
   externals: {
-    NProgress: 'NProgress',
-    react: "React",
-    "react-dom": "ReactDOM"
+    NProgress: 'NProgress'
+    // react: "React",
+    // "react-dom": "ReactDOM"
   },
   optimization: {
     minimizer: [
