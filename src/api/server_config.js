@@ -8,9 +8,9 @@ function resolveIp() {
     };
   }
   return {
-    login: 'http://passport.leekerlabs.com',
-    thirdServer: 'http://dashboard.api.leekerlabs.com',
-    logic: 'http://dashboard.api.leekerlabs.com'
+    login: 'https://passport.leekerlabs.com',
+    thirdServer: 'https://dashboard-api.leekerlabs.com',
+    logic: 'https://dashboard-api.leekerlabs.com'
   };
 }
 export const serverIp = resolveIp();
