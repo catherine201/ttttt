@@ -120,7 +120,8 @@ class ResiveControl extends React.Component {
           {tags &&
             tags.map(tag => {
               const ind = menuArr.findIndex(item => item._id === tag);
-              const tagName = menuArr[ind].name;
+              console.log(ind);
+              const tagName = ind !== -1 && menuArr[ind].name;
               const isLongTag = tagName.length > 20;
               const tagElem = (
                 <Tag
