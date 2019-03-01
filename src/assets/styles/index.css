@@ -33,6 +33,10 @@ body{
 html body .christmas.ant-btn-primary:before{
   display: none;
 }
+#root{
+  height: 100%;
+  overflow: auto;
+}
 /* 头部进步条的样式 */
 #nprogress .bar {
   background: #812CB2 ;
