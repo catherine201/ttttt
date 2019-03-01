@@ -8,7 +8,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: false
     }
   },
   authLogin: {
@@ -25,7 +25,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: false
     }
   },
   // 查询用户列表  获取用户对应菜单
@@ -34,7 +34,7 @@ const config = {
     method: 'get',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: false
     }
   }
 };
