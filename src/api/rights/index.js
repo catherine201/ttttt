@@ -5,24 +5,24 @@ const config = {
   // 权限新增
   addRights: {
     url: '/rights',
+    method: 'post',
     options: {
-      method: 'POST',
       baseUrl: serverIp.article
     }
   },
   // 修改权限
   reviseRights: {
-    url: '/rights/%id%/',
+    url: '/rights',
+    method: 'put',
     options: {
-      method: 'PUT',
       baseUrl: serverIp.article
     }
   },
   // 查询权限
   queryRights: {
     url: '/rights',
+    method: 'get',
     options: {
-      method: 'GET',
       showLoading: false,
       baseUrl: serverIp.article
     }
@@ -37,9 +37,9 @@ const config = {
   // },
   // 删除权限
   deleteRights: {
-    url: '/rights/%id%/',
+    url: '/rights',
+    method: 'delete',
     options: {
-      method: 'DELETE',
       baseUrl: serverIp.article
     }
   }

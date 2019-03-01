@@ -39,6 +39,25 @@ const config = {
       showLoading: true
     }
   },
+  // article 预登录
+  articleAuthLogin: {
+    url: '/api/tokens/auth_code',
+    method: 'get',
+    options: {
+      baseUrl: serverIp.login,
+      showLoading: false
+    }
+  },
+  // article 最终登录
+  articleSecondLogin: {
+    url: '/login',
+    method: 'post',
+    options: {
+      baseUrl: serverIp.article,
+      showLoading: false
+      // baseUrl: serverIp.article
+    }
+  },
   // 登出
   logout: {
     url: '/logout',

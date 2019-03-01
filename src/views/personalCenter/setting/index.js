@@ -3,7 +3,28 @@ import { Table, Input, Button, Icon, Divider, Modal } from 'antd';
 import { connect } from 'react-redux';
 import AddEditMenu from './add';
 import styles from './index.less';
+import createApi from '../../../api/registerAndLogin';
 
+let second_access_token = '';
+
+const init = async function() {
+  const authObj = {
+    access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+    appid: '79ae03d05626dcc0c5c207e0cdc682b6'
+  };
+  const authResult = await createApi.articleAuthLogin(authObj);
+  if (authResult) {
+    const info = {
+      auth_code: authResult.data.auth_code,
+      openid: JSON.parse(sessionStorage.getItem('user')).openid
+    };
+    const result = await createApi.articleSecondLogin(info);
+    if (result) {
+      second_access_token = result.data.access_token;
+      console.log(second_access_token);
+    }
+  }
+};
 class Console extends React.Component {
   static propTypes = {};
 
@@ -26,14 +47,10 @@ class Console extends React.Component {
     };
   }
 
-  componentDidMount() {
-    window.addEventListener('resize', () => {
-      this.setState({
-        clientHeight: document.body.offsetHeight - 400
-      });
-    });
+  async componentWillMount() {
+    await init();
     const obj = {
-      access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
+      access_token: second_access_token,
       // name: this.state.menuNameInput, // name 不传就是查询所有
       limit: 7,
       offset: 0
@@ -50,10 +67,17 @@ class Console extends React.Component {
     });
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      this.setState({
+        clientHeight: document.body.offsetHeight - 400
+      });
+    });
+  }
+
   searchByName = () => {
     const obj = {
-      access_token: JSON.parse(sessionStorage.getItem('user'))
-        .second_access_token,
+      access_token: second_access_token,
       name: this.state.menuNameInput,
       limit: 7,
       offset: 0
@@ -90,8 +114,7 @@ class Console extends React.Component {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     const obj = {
-      access_token: JSON.parse(sessionStorage.getItem('user'))
-        .second_access_token,
+      access_token: second_access_token,
       limit: 7,
       offset: (pagination.current - 1) * this.state.limit
     };
@@ -133,14 +156,18 @@ class Console extends React.Component {
           if (!err) {
             console.log(values);
             const obj = {
-              access_token: JSON.parse(sessionStorage.getItem('user'))
-                .second_access_token,
+              access_token: second_access_token,
               user_name: values.user_name,
               path_name: values.path_name
             };
             this.props.addRights(obj).then(res => {
               if (res) {
-                this.props.getInitMenu().then(result => {
+                const sendObj = {
+                  access_token: second_access_token,
+                  limit: 7,
+                  offset: 0
+                };
+                this.props.getInitMenu(sendObj).then(result => {
                   result &&
                     this.setState({
                       showModal: 0,
@@ -163,14 +190,20 @@ class Console extends React.Component {
           if (!err) {
             console.log(values);
             const obj = {
-              id: this.state.sendData._id,
-              path_name: values.path_name,
-              access_token: JSON.parse(sessionStorage.getItem('user'))
-                .second_access_token
+              url: this.state.sendData._id,
+              query: {
+                path_name: values.path_name,
+                access_token: second_access_token
+              }
             };
             this.props.reviseRights(obj).then(res => {
               if (res) {
-                this.props.getInitMenu().then(result => {
+                const sendObj = {
+                  access_token: second_access_token,
+                  limit: 7,
+                  offset: 0
+                };
+                this.props.getInitMenu(sendObj).then(result => {
                   result &&
                     this.setState({
                       showModal: 0,
@@ -234,16 +267,20 @@ class Console extends React.Component {
       centered: true,
       onOk: () => {
         const obj = {
-          id: data._id,
-          access_token: JSON.parse(sessionStorage.getItem('user'))
-            .second_access_token
+          url: data._id,
+          query: { access_token: second_access_token }
         };
         this.props.deleteRights(obj).then(res => {
           this.setState({
             menuNameInput: ''
           });
           if (res) {
-            this.props.getInitMenu();
+            const sendObj = {
+              access_token: second_access_token,
+              limit: 7,
+              offset: 0
+            };
+            this.props.getInitMenu(sendObj);
           }
         });
       }
