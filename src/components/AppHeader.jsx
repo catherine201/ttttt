@@ -108,47 +108,17 @@ class AppHeader extends React.Component {
             菜单管理
           </Menu.Item>
         )}
-        {/* <Menu.Item
-          key="2"
-          onClick={() => this.toHref('/personalCenter/binding')}
-        >
-          <Icon type="link" style={{ marginRight: '5px' }} />
-          账号绑定
-        </Menu.Item> */}
-        {/* <Menu.Item
-          key="3"
-          onClick={() => this.toHref('/personalCenter/safetyCheck')}
-        >
-          <Icon type="check-circle" style={{ marginRight: '5px' }} />
-          安全验证
-        </Menu.Item> */}
-        {/* {JSON.parse(sessionStorage.getItem('user')).type === 'admin' && (
-          <React.Fragment>
-            <Menu.Item
-              key="5"
-              onClick={() => this.toHref('/personalCenter/user')}
-            >
-              <Icon type="check-circle" style={{ marginRight: '5px' }} />
-              用户管理
-            </Menu.Item>
-            <Menu.Item
-              key="6"
-              onClick={() => this.toHref('/personalCenter/group')}
-            >
-              <Icon type="check-circle" style={{ marginRight: '5px' }} />
-              分组管理
-            </Menu.Item>
-            <Menu.Item
-              key="7"
-              onClick={() => this.toHref('/personalCenter/menu')}
-            >
-              <Icon type="check-circle" style={{ marginRight: '5px' }} />
-              菜单管理
-            </Menu.Item>
-          </React.Fragment>
-        )} */}
+        {JSON.parse(sessionStorage.getItem('user')).type === 'owner' && (
+          <Menu.Item
+            key="8"
+            onClick={() => this.toHref('/personalCenter/setting')}
+          >
+            <Icon type="setting" style={{ marginRight: '5px' }} />
+            发布文章权限管理
+          </Menu.Item>
+        )}
         <Menu.Divider />
-        <Menu.Item key="8" onClick={() => this.doLogout()}>
+        <Menu.Item key="9" onClick={() => this.doLogout()}>
           <Icon type="logout" style={{ marginRight: '5px' }} />
           退出
         </Menu.Item>

@@ -91,6 +91,11 @@ const router = new Router({
           name: 'menu',
           component: page('personalCenter/menuMsg')
         }, // 菜单管理
+        {
+          path: '/setting',
+          name: 'setting',
+          component: page('personalCenter/setting')
+        }, // 文章发布权限管理
         { name: 404, component: page('404') }
       ]
     },

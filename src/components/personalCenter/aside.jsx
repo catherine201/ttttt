@@ -81,6 +81,17 @@ export default class Asider extends React.Component {
         menu: this.state.menu
       });
     }
+    if (JSON.parse(sessionStorage.getItem('user')).type === 'owner') {
+      this.state.menu.push({
+        key: 'setting',
+        path: '/personalCenter/setting',
+        text: '分布文章权限管理'
+      });
+      console.log(this.state.menu);
+      this.setState({
+        menu: this.state.menu
+      });
+    }
   }
 
   render() {

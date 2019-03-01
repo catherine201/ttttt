@@ -139,7 +139,7 @@ class Info extends React.Component {
         // openid: JSON.parse(sessionStorage.getItem('user')).openid,
         access_token: JSON.parse(sessionStorage.getItem('user')).access_token,
         // name: `${parseInt(100 * Math.random())}${file.name}`,
-        name: `backup_management_${file.name}`,
+        name: `backup_management/${file.name}`,
         method_name: 'put',
         content_type: 'image/jpeg'
       },
