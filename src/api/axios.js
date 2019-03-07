@@ -113,10 +113,8 @@ function createDom() {
 }
 
 // let loadingNum = 0;
-
-function fetchApi(param, options) {
   // 遮罩层
-  const loading = {
+  export const loading = {
     start: () => {
       const containerDOM = document.getElementById('loadingContainer');
       if (!containerDOM) {
@@ -134,6 +132,8 @@ function fetchApi(param, options) {
       }, 1000);
     }
   };
+
+function fetchApi(param, options) {
   if (typeof options.showLoading !== 'boolean') {
     options.showLoading = true;
   }
