@@ -5,6 +5,7 @@ import LoginPassWord from './loginPassWord';
 import createApi from '../../api/registerAndLogin';
 import LoginGa from './loginGa';
 import { getParams } from '../../utils';
+import { loading } from '../../api/axios';
 
 const srcImg = require('../../assets/images/logo.png');
 
@@ -49,9 +50,12 @@ class Login extends React.Component {
     };
     const authResult = await createApi.authLogin(authObj);
     if (authResult) {
+      loading.end();
       window.location.href = `${getParams('redirect_uri')}?auth_code=${
         authResult.data.auth_code
       }&scope=${getParams('scope')}&state=${getParams('state')}`;
+    }else{
+      loading.end();
     }
   };
 

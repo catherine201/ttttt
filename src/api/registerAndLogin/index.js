@@ -18,7 +18,7 @@ const config = {
     method: 'post',
     options: {
       errorHandler: true,
-      showLoading: true,
+      showLoading: false,
       baseUrl: serverIp.login
     }
   },
@@ -36,7 +36,7 @@ const config = {
     method: 'post',
     options: {
       errorHandler: true,
-      showLoading: true
+      showLoading: false
     }
   },
   // article 预登录
