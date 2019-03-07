@@ -113,27 +113,27 @@ function createDom() {
 }
 
 // let loadingNum = 0;
-  // 遮罩层
-  export const loading = {
-    start: () => {
-      const containerDOM = document.getElementById('loadingContainer');
-      if (!containerDOM) {
-        createDom();
-      } else {
-        containerDOM.style.display = 'block';
-      }
-    },
-    end: () => {
-      setTimeout(() => {
-        const containerDOM = document.getElementById('loadingContainer');
-        if (containerDOM) {
-          containerDOM.style.display = 'none';
-        }
-      }, 1000);
+// 遮罩层
+export const loading = {
+  start: () => {
+    const containerDOM = document.getElementById('loadingContainer');
+    if (!containerDOM) {
+      createDom();
+    } else {
+      containerDOM.style.display = 'block';
     }
-  };
+  },
+  end: () => {
+    setTimeout(() => {
+      const containerDOM = document.getElementById('loadingContainer');
+      if (containerDOM) {
+        containerDOM.style.display = 'none';
+      }
+    }, 1000);
+  }
+};
 
-function fetchApi(param, options) {
+export function fetchApi(param, options) {
   if (typeof options.showLoading !== 'boolean') {
     options.showLoading = true;
   }

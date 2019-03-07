@@ -54,7 +54,7 @@ class Login extends React.Component {
       window.location.href = `${getParams('redirect_uri')}?auth_code=${
         authResult.data.auth_code
       }&scope=${getParams('scope')}&state=${getParams('state')}`;
-    }else{
+    } else {
       loading.end();
     }
   };
