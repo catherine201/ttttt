@@ -4,6 +4,7 @@ import styles from './login.less';
 import LoginPassWord from './loginPassWord';
 import createApi from '../../api/registerAndLogin';
 import LoginGa from './loginGa';
+import { loading } from '../../api/axios';
 
 const srcImg = require('../../assets/images/logo.png');
 
@@ -55,6 +56,7 @@ class Login extends React.Component {
       const result = await createApi.secondLogin(info);
       if (result) {
         console.log(result);
+        loading.end();
         this.props.dispatch.menu.getOwnMenu();
         userObj.second_access_token = result.access_token;
         userObj._id = result.user_id;
@@ -70,7 +72,10 @@ class Login extends React.Component {
         // this.props.history.push('/personalCenter/user');
       } else {
         this.$msg.error('登陆失败');
+        loading.end();
       }
+    } else {
+      loading.end();
     }
     // const userObj = res.data;
     // sessionStorage.setItem('user', JSON.stringify(userObj));

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 // import styles from './login.less';
 import createApi from '../../api/registerAndLogin';
 import { regular } from '../../utils/validate';
+import { loading } from '../../api/axios';
 
 // const srcImg = require('../../assets/images/logo.png');
 
@@ -75,6 +76,7 @@ class LoginPassWord extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
+    loading.start();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const obj = {
