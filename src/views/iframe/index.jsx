@@ -20,6 +20,11 @@ function Test(props) {
         JSON.parse(sessionStorage.getItem('user')).access_token
       }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
       break;
+    case srcAddr.startsWith('https://otc.leekerlabs.com'):
+      srcAddr = `${srcAddr}?id=9752da7278fd6c3495c8b4fdb29a8a29&token=${
+        JSON.parse(sessionStorage.getItem('user')).access_token
+      }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
+      break;
     default:
       break;
   }
