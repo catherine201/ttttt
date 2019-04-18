@@ -10,7 +10,7 @@ function Test(props) {
   const id = props.match.params.id;
   let srcAddr = arr.filter(item => item._id === id)[0].target;
   switch (true) {
-    case srcAddr.startsWith('http://dash-upgrade.tbnb.io'):
+    case srcAddr.startsWith('http://dash-update.tbnb.io'):
       srcAddr = `${srcAddr}?id=703fc6949ad96cd3fe08f5ac16e3adc3&token=${
         JSON.parse(sessionStorage.getItem('user')).access_token
       }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
