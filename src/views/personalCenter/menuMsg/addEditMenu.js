@@ -28,7 +28,7 @@ class AddEditMenu extends React.Component {
   }
 
   validateUrl = (rule, value, callback) => {
-    // const reg = /^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/i; // 密码至少为8位的字母,数字,字符任意两种的组合
+    // const reg = /^http?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/i; // 密码至少为8位的字母,数字,字符任意两种的组合
     if (value && !regular.url.test(value)) {
       callback('地址不符合规范');
     } else {
