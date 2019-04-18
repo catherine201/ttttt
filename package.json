@@ -87,9 +87,11 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "server": "nodemon server.js",
+    "start": "cross-env NEW=true node scripts/start.js NEW=true",
+    "start:new": "cross-env NEW=true node scripts/start.js",
+    "server": "cross-env NEW=true nodemon server.js",
     "build": "node scripts/build.js",
+    "build:new": "node scripts/build.js -- --new",
     "pm": "pm2 start server.js",
     "format": "onchange 'src/**/*.js' 'src/**/*.jsx' 'src/**/*.scss' -- prettier --write {{changed}}"
   },

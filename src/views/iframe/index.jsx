@@ -10,17 +10,17 @@ function Test(props) {
   const id = props.match.params.id;
   let srcAddr = arr.filter(item => item._id === id)[0].target;
   switch (true) {
-    case srcAddr.startsWith('https://dbapp.leekerlabs.com'):
+    case srcAddr.startsWith('https://dash-upgrade.leekerlabs.com'):
       srcAddr = `${srcAddr}?id=703fc6949ad96cd3fe08f5ac16e3adc3&token=${
         JSON.parse(sessionStorage.getItem('user')).access_token
       }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
       break;
-    case srcAddr.startsWith('https://art.leekerlabs.com'):
+    case srcAddr.startsWith('https://dash-art.leekerlabs.com'):
       srcAddr = `${srcAddr}?id=79ae03d05626dcc0c5c207e0cdc682b6&token=${
         JSON.parse(sessionStorage.getItem('user')).access_token
       }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
       break;
-    case srcAddr.startsWith('https://otc.leekerlabs.com'):
+    case srcAddr.startsWith('https://dash-otc.leekerlabs.com'):
       srcAddr = `${srcAddr}?id=9752da7278fd6c3495c8b4fdb29a8a29&token=${
         JSON.parse(sessionStorage.getItem('user')).access_token
       }&openid=${JSON.parse(sessionStorage.getItem('user')).openid}`;
