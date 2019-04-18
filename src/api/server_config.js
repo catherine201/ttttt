@@ -16,10 +16,10 @@ function resolveIp() {
   //   article: 'https://art-api.euen.io'
   // };
   return {
-    login: 'https://dash-api.leekerlabs.com',
-    thirdServer: 'https://dash-passport-api.leekerlabs.com',
-    logic: 'https://dash-passport-api.leekerlabs.com',
-    article: 'https://dash-art-api.leekerlabs.com'
+    login: 'https://dash-passport-api.tbnb.io:10101',
+    thirdServer: 'https://dash-api.tbnb.io:10101',
+    logic: 'https://dash-api.tbnb.io:10101',
+    article: 'https://dash-art-api.tbnb.io:10101'
   };
 }
 export const serverIp = resolveIp();
