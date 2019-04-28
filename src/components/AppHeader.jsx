@@ -157,16 +157,17 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const { avatar, nickName } = this.props;
-    console.log(avatar);
+    const { avatar, nickName, topMenu } = this.props;
+    console.log(topMenu);
     return (
       <Header>
-        <div className="f-left">
+        <div className="f-left color_white">
           <Icon
             className="trigger"
             type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
             onClick={this.props.onClick}
           />
+          {topMenu}
         </div>
         <div className="f-right">
           <ul className="head-nav-list">
@@ -222,7 +223,8 @@ class AppHeader extends React.Component {
 // export default AppHeader;
 const mapStateToProps = state => ({
   avatar: state.aside.avatar,
-  nickName: state.aside.nickName
+  nickName: state.aside.nickName,
+  topMenu: state.menu.topMenu
 });
 
 // const mapDispatchToProps = dispatch => ({

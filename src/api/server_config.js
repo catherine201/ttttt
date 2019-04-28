@@ -15,11 +15,18 @@ function resolveIp() {
   //   logic: 'https://dashboard-api.leekerlabs.com',
   //   article: 'https://art-api.euen.io'
   // };
-  return {
-    login: 'http://dash-passport-api.tbnb.io:10101',
-    thirdServer: 'http://dash-api.tbnb.io:10101',
-    logic: 'http://dash-api.tbnb.io:10101',
-    article: 'http://dash-art-api.tbnb.io:10101'
-  };
+  return process.env.ENV_RGV === 'old'
+    ? {
+        login: 'https://passport.leekerlabs.com',
+        thirdServer: 'https://dashboard-api.leekerlabs.com',
+        logic: 'https://dashboard-api.leekerlabs.com',
+        article: 'https://art-api.euen.io'
+      }
+    : {
+        login: 'http://dash-passport-api.tbnb.io:10101',
+        thirdServer: 'http://dash-api.tbnb.io:10101',
+        logic: 'http://dash-api.tbnb.io:10101',
+        article: 'http://dash-art-api.tbnb.io:10101'
+      };
 }
 export const serverIp = resolveIp();

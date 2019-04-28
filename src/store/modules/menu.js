@@ -13,7 +13,11 @@ const asideState = {
     ownMenuArr:
       (sessionStorage.getItem('store') &&
         JSON.parse(sessionStorage.getItem('store')).menu.ownMenuArr) ||
-      []
+      [],
+    topMenu:
+      (sessionStorage.getItem('store') &&
+        JSON.parse(sessionStorage.getItem('store')).menu.topMenu) ||
+      ''
   },
   reducers: {
     setMenu(state, data) {
@@ -35,6 +39,12 @@ const asideState = {
       return {
         ...state,
         groupArr: data
+      };
+    },
+    setTopMenu(state, data) {
+      return {
+        ...state,
+        topMenu: data
       };
     }
   },
@@ -69,6 +79,9 @@ const asideState = {
         console.log(dispatch);
         dispatch.menu.setGroup(res.datas);
       }
+    },
+    getTopMenu(value) {
+      dispatch.menu.setTopMenu(value);
     }
   })
 };

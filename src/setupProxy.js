@@ -14,7 +14,7 @@ module.exports = function(app) {
   app.use(
     proxy('/log', {
       // target: 'http://passport.leekerlabs.com/',
-      target: 'http://192.168.10.86:9000/',
+      target: 'http://192.168.10.66:9000/',
       changeOrigin: true,
       pathRewrite: {
         '^/log': ''

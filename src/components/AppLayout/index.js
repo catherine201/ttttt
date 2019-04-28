@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, BackTop, Icon } from 'antd';
+// import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import router from '../../routes';
 import AppHeader from '../AppHeader';
@@ -90,4 +91,8 @@ class App extends Component {
   }
 }
 
+// const mapStateToProps = state => ({
+//   topMenu: state.menu.topMenu
+// });
 export default App;
+// export default connect(mapStateToProps)(App);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'react-redux';
+import { emnuIcon } from '../../utils/map';
 
 const logoImg = require('../../assets/images/logo.png');
 
@@ -11,9 +12,16 @@ class AppSider extends React.Component {
   state = {
     // limit: 100,
     // menu: []
+    id: ''
   };
 
   componentDidMount() {
+    console.log(this.props.location.pathname);
+    const arr = this.props.location.pathname.split('/');
+    console.log(arr[arr.length - 1]);
+    this.setState({
+      id: arr[arr.length - 1]
+    });
     // const obj = {
     //   url: `${JSON.parse(sessionStorage.getItem('user'))._id}/menus`,
     //   query: {
@@ -23,6 +31,14 @@ class AppSider extends React.Component {
     // };
     // this.queryUser(obj);
   }
+
+  // componentWillReceiveProps() {
+  //   const arr = this.props.location.pathname.split('/');
+  //   console.log(arr[arr.length - 1]);
+  //   this.setState({
+  //     id: arr[arr.length - 1]
+  //   });
+  // }
 
   // queryUser = async obj => {
   //   const res = await createApi.queryUser(obj);
@@ -38,50 +54,65 @@ class AppSider extends React.Component {
   // };
 
   generateMenu = function(menus) {
+    const { id } = this.state;
     let items = [];
-    items = menus.map(menu => (
-      // if (Array.isArray(menu.submenu)) {
-      //   return (
-      //     <SubMenu
-      //       key={menu.key}
-      //       title={
-      //         <div>
-      //           <Icon type={menu.icon} />
-      //           <span>{menu.text}</span>
-      //         </div>
-      //       }
-      //     >
-      //       {generateMenu(menu.submenu, true)}
-      //     </SubMenu>
-      //   );
-      // }
-      <Menu.Item key={menu._id}>
-        <p
-          onClick={() => {
-            this.toHref(menu._id);
-          }}
+    items = menus.map(menu => {
+      console.log(menu._id, id);
+      console.log(menu._id === id);
+      return (
+        // if (Array.isArray(menu.submenu)) {
+        //   return (
+        //     <SubMenu
+        //       key={menu.key}
+        //       title={
+        //         <div>
+        //           <Icon type={menu.icon} />
+        //           <span>{menu.text}</span>
+        //         </div>
+        //       }
+        //     >
+        //       {generateMenu(menu.submenu, true)}
+        //     </SubMenu>
+        //   );
+        // }
+        <Menu.Item
+          key={menu._id}
+          className={
+            menu._id === id ? 'appSider-list-item-active' : 'appSider-list-item'
+          }
         >
-          {/* {menu.icon_url ? <img src={menu.icon_url} alt="" /> : ''} */}
-          <Icon type="appstore" />
-          <span className="nav-text">{menu.name}</span>
-          {/* {!this.props.collapsed ? (
+          <p
+            onClick={() => {
+              this.toHref(menu._id, menu.name);
+            }}
+          >
+            {/* {menu.icon_url ? <img src={menu.icon_url} alt="" /> : ''} */}
+            <Icon type={emnuIcon[menu.name] || 'appstore'} />
+            <span className="nav-text">{menu.name}</span>
+            {/* {!this.props.collapsed ? (
             <span className="nav-text">{menu.name}</span>
           ) : (
             ''
           )} */}
-        </p>
-      </Menu.Item>
-    ));
+          </p>
+        </Menu.Item>
+      );
+    });
     return items;
   };
 
-  toHref(target) {
+  toHref(target, name) {
     console.log(target);
-    console.log(this);
+    console.log(name);
+    this.setState({
+      id: target
+    });
+    this.props.getTopMenu(name);
     this.props.history.push(`/admin/console/${target}`);
   }
 
   render() {
+    console.log('rePain again');
     const { ownMenuArr } = this.props;
     return (
       <Sider collapsed={this.props.collapsed} trigger={null}>
@@ -103,4 +134,10 @@ class AppSider extends React.Component {
 const mapStateToProps = state => ({
   ownMenuArr: state.menu.ownMenuArr
 });
-export default connect(mapStateToProps)(AppSider);
+const mapDispatchToProps = dispatch => ({
+  getTopMenu: dispatch.menu.getTopMenu
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppSider);
